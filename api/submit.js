@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   }
 
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
-  const TO_EMAIL = 'ross_bloomfield@hotmail.co.uk';
+  const TO_EMAIL = 'roscoebloomfield89@gmail.com';
 
   if (!RESEND_API_KEY) {
     return res.status(500).json({ error: 'Email service not configured' });
@@ -31,6 +31,7 @@ export default async function handler(req, res) {
           <h1 style="color: #c9a84c; margin: 0; font-size: 28px; letter-spacing: 2px;">BLOOMFIELD YACHTING</h1>
           <p style="color: #8fa8c8; margin: 8px 0 0; font-size: 14px; letter-spacing: 3px;">CHARTER ENQUIRY FORM</p>
         </div>
+
         <div style="background: #ffffff; padding: 30px; border: 1px solid #e0e0e0;">
           <h2 style="color: #0c2340; border-bottom: 2px solid #c9a84c; padding-bottom: 8px; font-size: 16px; letter-spacing: 1px;">CLIENT DETAILS</h2>
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
@@ -41,6 +42,7 @@ export default async function handler(req, res) {
             <tr><td style="padding: 8px 0; color: #666;">Member ID</td><td style="padding: 8px 0;">${data.memberId || '-'}</td></tr>
             <tr><td style="padding: 8px 0; color: #666;">Referred By</td><td style="padding: 8px 0;">${data.referredBy || '-'}</td></tr>
           </table>
+
           <h2 style="color: #0c2340; border-bottom: 2px solid #c9a84c; padding-bottom: 8px; font-size: 16px; letter-spacing: 1px;">CHARTER PREFERENCES</h2>
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
             <tr><td style="padding: 8px 0; color: #666; width: 40%;">Preferred Start Date</td><td style="padding: 8px 0; font-weight: bold;">${data.startDate || '-'}</td></tr>
@@ -52,6 +54,7 @@ export default async function handler(req, res) {
             <tr><td style="padding: 8px 0; color: #666;">Children</td><td style="padding: 8px 0;">${data.children || '-'}</td></tr>
             <tr><td style="padding: 8px 0; color: #666;">Weekly Budget (USD)</td><td style="padding: 8px 0; font-weight: bold;">${data.budget || '-'}</td></tr>
           </table>
+
           <h2 style="color: #0c2340; border-bottom: 2px solid #c9a84c; padding-bottom: 8px; font-size: 16px; letter-spacing: 1px;">YACHT PREFERENCES</h2>
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
             <tr><td style="padding: 8px 0; color: #666; width: 40%;">Yacht Type</td><td style="padding: 8px 0;">${data.yachtType || '-'}</td></tr>
@@ -59,12 +62,16 @@ export default async function handler(req, res) {
             <tr><td style="padding: 8px 0; color: #666;">Style</td><td style="padding: 8px 0;">${data.yachtStyle || '-'}</td></tr>
             <tr><td style="padding: 8px 0; color: #666;">Desired Amenities</td><td style="padding: 8px 0;">${amenities.length > 0 ? amenities.join(', ') : '-'}</td></tr>
           </table>
+
           <h2 style="color: #0c2340; border-bottom: 2px solid #c9a84c; padding-bottom: 8px; font-size: 16px; letter-spacing: 1px;">OCCASION & SPECIAL REQUIREMENTS</h2>
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
             <tr><td style="padding: 8px 0; color: #666; width: 40%;">Occasion</td><td style="padding: 8px 0;">${data.occasion || '-'}</td></tr>
             <tr><td style="padding: 8px 0; color: #666;">Special Requirements</td><td style="padding: 8px 0;">${data.specialRequirements || '-'}</td></tr>
           </table>
-          <p style="color: #666; font-size: 11px; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e0e0e0;">This enquiry was submitted via the Bloomfield Yachting online charter enquiry form on ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}.</p>
+
+          <p style="color: #666; font-size: 11px; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
+            This enquiry was submitted via the Bloomfield Yachting online charter enquiry form on ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}.
+          </p>
         </div>
       </div>
     `;
@@ -94,4 +101,4 @@ export default async function handler(req, res) {
     console.error('Server error:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
-}
+              }
