@@ -382,6 +382,21 @@ document.getElementById('startDate').addEventListener('change', function() {
 
 async function submitForm(e) {
   e.preventDefault();
+
+  // Require consent checkbox
+  const consentBox = document.querySelector('[name="consent"]');
+  if (!consentBox || !consentBox.checked) {
+    const consentField = consentBox.closest('.field');
+    if (consentField) {
+      consentField.style.color = '#c0392b';
+      consentField.style.border = '1px solid #c0392b';
+      consentField.style.padding = '10px';
+      consentField.style.borderRadius = '6px';
+      consentBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return;
+  }
+
   const btn = document.getElementById('btn-submit');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Submitting...';
