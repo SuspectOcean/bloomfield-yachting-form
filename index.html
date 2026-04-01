@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0MDY3CWV33"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0MDY3CWV33');
+  </script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Bloomfield Yachting &mdash; Charter Enquiry</title>
@@ -382,6 +390,7 @@ async function submitForm(e) {
   try {
     const res = await fetch('/api/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
     if (res.ok) {
+        gtag('event', 'charter_enquiry_submitted', { event_category: 'form', event_label: data.destination || 'unknown' });
       document.getElementById('success-overlay').classList.add('visible');
     } else {
       alert('There was a problem submitting your enquiry. Please try again or contact us directly.');
