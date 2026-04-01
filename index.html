@@ -169,13 +169,13 @@ option { font-weight: 400; color: var(--text); padding: 4px 0; }
     <h2 class="section-title">Client Details</h2>
 
     <div class="field-row">
-      <div class="field"><label for="fullName">Full Name *</label><input type="text" id="fullName" name="fullName" required /></div>
-      <div class="field"><label for="email">Email Address *</label><input type="email" id="email" name="email" required /></div>
+      <div class="field"><label for="fullName">Full Name</label><input type="text" id="fullName" name="fullName" required /></div>
+      <div class="field"><label for="email">Email Address</label><input type="email" id="email" name="email" required /></div>
     </div>
 
     <div class="field-row">
       <div class="field">
-        <label for="phone">Phone Number *</label>
+        <label for="phone">Phone Number</label>
         <div class="phone-input-group">
           <select id="phoneCode" name="phoneCode" class="phone-code-select">
             <option value="+44">+44</option>
@@ -232,8 +232,8 @@ option { font-weight: 400; color: var(--text); padding: 4px 0; }
     <h2 class="section-title">Charter Preferences</h2>
 
     <div class="field-row three-col">
-      <div class="field"><label for="startDate">Preferred Start Date *</label><input type="date" id="startDate" name="startDate" required /></div>
-      <div class="field"><label for="endDate">Preferred End Date *</label><input type="date" id="endDate" name="endDate" required /></div>
+      <div class="field"><label for="startDate">Preferred Start Date</label><input type="date" id="startDate" name="startDate" required /></div>
+      <div class="field"><label for="endDate">Preferred End Date</label><input type="date" id="endDate" name="endDate" required /></div>
       <div class="field"><label>Dates Flexible?</label><div class="radio-group"><label><input type="radio" name="datesFlexible" value="Yes" /><span>Yes</span></label><label><input type="radio" name="datesFlexible" value="No" checked /><span>No</span></label></div></div>
     </div>
 
@@ -250,6 +250,7 @@ option { font-weight: 400; color: var(--text); padding: 4px 0; }
             <option value="Spain">Spain</option>
             <option value="Turkey">Turkey</option>
             <option value="Montenegro">Montenegro</option>
+            <option value="Other">Other</option>
           </optgroup>
           <optgroup label="Caribbean (December - April)">
             <option value="British Virgin Islands">British Virgin Islands</option>
@@ -259,6 +260,7 @@ option { font-weight: 400; color: var(--text); padding: 4px 0; }
             <option value="Antigua">Antigua</option>
             <option value="St. Lucia &amp; Martinique">St. Lucia &amp; Martinique</option>
             <option value="US Virgin Islands">US Virgin Islands</option>
+             <option value="Other">Other</option>
           </optgroup>
           <optgroup label="Exotic &amp; Long-Haul">
             <option value="Seychelles">Seychelles</option>
@@ -269,12 +271,20 @@ option { font-weight: 400; color: var(--text); padding: 4px 0; }
             <option value="Fiji">Fiji</option>
             <option value="French Polynesia">French Polynesia</option>
             <option value="Australia">Australia</option>
+             <option value="Other">Other</option>
           </optgroup>
           <optgroup label="Americas">
-            <option value="New England, USA">New England, USA</option>
-            <option value="Florida Keys, USA">Florida Keys, USA</option>
+            <option value="Florida, USA">Florida, USA</option>
+            <option value="Georgia To Delaware, USA">Georgia To Delaware, USA</option>
+            <option value="California, USA">California, USA</option>
+            <option value="Pacific North West, USA">Pacific North West, USA</option>
+            <option value="Northern East Coast, USA">Northern East Coast, USA</option>
             <option value="Alaska, USA">Alaska, USA</option>
+            <option value="Baja, Mexico">Baja, Mexico</option>
+            <option value="Central America, West">Central America, West</option>
+            <option value="Central America, East">Central America, East</option>
             <option value="Galapagos Islands, Ecuador">Galapagos Islands, Ecuador</option>
+             <option value="Other">Other</option>
           </optgroup>
         </select>
       </div>
@@ -283,7 +293,7 @@ option { font-weight: 400; color: var(--text); padding: 4px 0; }
 
     <div class="field-row three-col">
       <div class="field">
-        <label for="adults">Number of Adults *</label>
+        <label for="adults">Number of Adults</label>
         <select id="adults" name="adults" required><option value="">Select...</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="12+">12+</option></select>
       </div>
       <div class="field">
@@ -291,7 +301,7 @@ option { font-weight: 400; color: var(--text); padding: 4px 0; }
         <select id="children" name="children"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="8+">8+</option></select>
       </div>
       <div class="field">
-        <label for="budget">Weekly Budget Range (USD) *</label>
+        <label for="budget">Weekly Budget Range (USD)</label>
         <select id="budget" name="budget" required><option value="">Select...</option><option value="$10,000 - $25,000">$10,000 - $25,000</option><option value="$25,000 - $50,000">$25,000 - $50,000</option><option value="$50,000 - $100,000">$50,000 - $100,000</option><option value="$100,000 - $250,000">$100,000 - $250,000</option><option value="$250,000 - $500,000">$250,000 - $500,000</option><option value="$500,000+">$500,000+</option></select>
       </div>
     </div>
