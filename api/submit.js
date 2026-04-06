@@ -72,10 +72,8 @@ export default async function handler(req, res) {
       </div>
     `;
 
-    // Send Resend email and Google Apps Script webhook in parallel
     const promises = [];
 
-    // 1. Resend email notification
     promises.push(
       fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -92,21 +90,37 @@ export default async function handler(req, res) {
       })
     );
 
-    // 2. Google Apps Script webhook (writes to Charter Tracker sheet + sends email)
     if (GOOGLE_SCRIPT_URL) {
       promises.push(
-        fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-          redirect: 'follow',
-        }).catch(err => console.error('Google Script error:', err))
+        (async () => {
+          try {
+            const scriptBody = JSON.stringify(data);
+            let resp = await fetch(GOOGLE_SCRIPT_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: scriptBody,
+              redirect: 'manual',
+            });
+            if (resp.status >= 300 && resp.status < 400) {
+              const loc = resp.headers.get('location');
+              if (loc) {
+                resp = await fetch(loc, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: scriptBody,
+                });
+              }
+            }
+            return resp;
+          } catch (err) {
+            console.error('Google Script error:', err);
+          }
+        })()
       );
     }
 
     const results = await Promise.all(promises);
 
-    // Check Resend response (first promise)
     const resendResponse = results[0];
     if (!resendResponse.ok) {
       const errorData = await resendResponse.json();
@@ -119,4 +133,4 @@ export default async function handler(req, res) {
     console.error('Server error:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
-  }
+}
