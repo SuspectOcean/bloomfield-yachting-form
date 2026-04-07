@@ -1,5 +1,19 @@
-import { sheetsAction } from '../lib/sheets.js';
 import { generatePDF } from '../lib/pdf.js';
+
+// Inline sheets helper (Edge Runtime can't resolve ../lib/sheets.js as shared module)
+async function sheetsAction(action, data = {}) {
+  const url = process.env.GOOGLE_SCRIPT_URL;
+  if (!url) throw new Error('GOOGLE_SCRIPT_URL not configured');
+  const body = JSON.stringify({ action, ...data });
+  let resp = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body,
+    redirect: 'follow',
+  });
+  const text = await resp.text();
+  try { return JSON.parse(text); } catch { return { raw: text }; }
+}
 
 export const config = { runtime: 'edge' };
 
@@ -24,7 +38,7 @@ export default async function handler(req) {
       );
     }
 
-    console.log(`Approve: Generating PDF and email for enquiry ${enquiryId}`);
+    console.log('Approve: Generating PDF and email for enquiry ' + enquiryId);
 
     // Get full enquiry details from sheets
     let enquiry = {};
@@ -33,13 +47,11 @@ export default async function handler(req) {
       enquiry = result.enquiry || {};
     } catch (err) {
       console.warn('Could not retrieve full enquiry details:', err.message);
-      // Continue with minimal enquiry data
     }
 
     // Generate PDF
     console.log('Generating PDF...');
     const pdfBytes = await generatePDF(enquiry, rankedYachts);
-    // Convert to base64 (Edge Runtime compatible — chunked to avoid stack overflow)
     const bytes = new Uint8Array(pdfBytes);
     let binary = '';
     const chunkSize = 8192;
@@ -48,35 +60,10 @@ export default async function handler(req) {
     }
     const pdfBase64 = btoa(binary);
 
-    console.log(`PDF generated, size: ${pdfBytes.length} bytes`);
+    console.log('PDF generated, size: ' + pdfBytes.length + ' bytes');
 
     // Prepare email
-    const yachtNames = rankedYachts.slice(0, 10).map((y) => y.name).join(', ');
-    const emailHtml = `
-<div style="font-family: Georgia, serif; max-width: 700px; margin: 0 auto; color: #1a2a3a;">
-  <div style="background: linear-gradient(135deg, #0c2340 0%, #1a3a5c 100%); padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-    <h1 style="color: #c9a84c; margin: 0; font-size: 28px; letter-spacing: 2px;">BLOOMFIELD YACHTING</h1>
-    <p style="color: #8fa8c8; margin: 8px 0 0; font-size: 14px; letter-spacing: 3px;">YACHT SELECTION</p>
-  </div>
-  <div style="background: #ffffff; padding: 30px; border: 1px solid #e0e0e0;">
-    <p>Dear ${enquiry.firstName || 'Valued Client'},</p>
-    <p>Please find attached the curated yacht selection for your enquiry:</p>
-    <table style="margin: 20px 0; border-collapse: collapse;">
-      <tr><td style="padding: 8px; color: #666;"><strong>Destination:</strong></td><td style="padding: 8px;">${enquiry.destination || 'TBD'}</td></tr>
-      <tr><td style="padding: 8px; color: #666;"><strong>Dates:</strong></td><td style="padding: 8px;">${enquiry.startDate || 'TBD'} to ${enquiry.endDate || 'TBD'}</td></tr>
-    </table>
-    <p><strong>Recommended Yachts:</strong></p>
-    <ul>
-      ${rankedYachts.slice(0, 10).map((y) => `<li>${y.name}</li>`).join('')}
-    </ul>
-    <p>These selections have been carefully matched to your specific requirements. Please review the full details in the attached PDF and contact us with any questions or to proceed with charter negotiations.</p>
-    <p>Best regards,<br><strong>Bloomfield Yachting</strong></p>
-    <p style="color: #999; font-size: 11px; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
-      This email and attached document contain confidential information for the intended recipient only.
-    </p>
-  </div>
-</div>
-    `;
+    const emailHtml = '<div style="font-family: Georgia, serif; max-width: 700px; margin: 0 auto; color: #1a2a3a;"><div style="background: linear-gradient(135deg, #0c2340 0%, #1a3a5c 100%); padding: 30px; text-align: center; border-radius: 8px 8px 0 0;"><h1 style="color: #c9a84c; margin: 0; font-size: 28px; letter-spacing: 2px;">BLOOMFIELD YACHTING</h1><p style="color: #8fa8c8; margin: 8px 0 0; font-size: 14px; letter-spacing: 3px;">YACHT SELECTION</p></div><div style="background: #ffffff; padding: 30px; border: 1px solid #e0e0e0;"><p>Dear ' + (enquiry.firstName || 'Valued Client') + ',</p><p>Please find attached the curated yacht selection for your enquiry.</p><p>Best regards,<br><strong>Bloomfield Yachting</strong></p></div></div>';
 
     // Send email via Resend with PDF attachment
     console.log('Sending email via Resend...');
@@ -84,16 +71,16 @@ export default async function handler(req) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        Authorization: 'Bearer ' + process.env.RESEND_API_KEY,
       },
       body: JSON.stringify({
         from: 'Bloomfield Yachting <onboarding@resend.dev>',
         to: ['roscoebloomfield89@gmail.com'],
-        subject: `Yacht Selection — ${enquiry.firstName || 'Client'} ${enquiry.lastName || ''} — ${enquiry.destination || 'Charter'}`,
+        subject: 'Yacht Selection - ' + (enquiry.firstName || 'Client') + ' ' + (enquiry.lastName || '') + ' - ' + (enquiry.destination || 'Charter'),
         html: emailHtml,
         attachments: [
           {
-            filename: `Bloomfield_Yachting_${enquiry.firstName || 'Client'}_${enquiry.lastName || ''}.pdf`,
+            filename: 'Bloomfield_Yachting_' + (enquiry.firstName || 'Client') + '_' + (enquiry.lastName || '') + '.pdf',
             content: pdfBase64,
           },
         ],
@@ -111,28 +98,20 @@ export default async function handler(req) {
 
     console.log('Email sent successfully');
 
-    // Update enquiry status to "Approved" in sheets
+    // Update enquiry status
     try {
       await sheetsAction('updateEnquiryStatus', {
         enquiryId,
         status: 'Approved',
         sentAt: new Date().toISOString(),
       });
-      console.log('Enquiry status updated');
     } catch (err) {
       console.warn('Could not update enquiry status:', err.message);
     }
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        pdfBase64,
-        emailSent: true,
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      }
+      JSON.stringify({ success: true, pdfBase64, emailSent: true }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
   } catch (err) {
     console.error('Approve error:', err);
@@ -141,4 +120,4 @@ export default async function handler(req) {
       headers: { 'Content-Type': 'application/json' },
     });
   }
-}
+            }
