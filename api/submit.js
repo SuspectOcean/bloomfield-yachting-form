@@ -133,7 +133,7 @@ export default async function handler(req, res) {
     }
  
     const results = await Promise.all(promises);
- 
+
     // Check Resend response (first promise)
     const resendResponse = results[0];
     if (!resendResponse.ok) {
@@ -141,7 +141,47 @@ export default async function handler(req, res) {
       console.error('Resend error:', errorData);
       return res.status(500).json({ error: 'Failed to send email' });
     }
- 
+
+    // Create search tracking entry after successful submission
+    if (GOOGLE_SCRIPT_URL) {
+      try {
+        console.log('DEBUG: Creating search entry in sheets');
+        const searchEntryBody = JSON.stringify({
+          action: 'createSearchEntry',
+          fullName: data.fullName,
+          email: data.email,
+          destination: data.destination,
+          startDate: data.startDate,
+          endDate: data.endDate,
+          searchStatus: 'pending',
+          createdAt: new Date().toISOString(),
+        });
+
+        let searchResp = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: searchEntryBody,
+          redirect: 'manual',
+        });
+
+        if (searchResp.status >= 300 && searchResp.status < 400) {
+          const loc = searchResp.headers.get('location');
+          if (loc) {
+            searchResp = await fetch(loc, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: searchEntryBody,
+            });
+          }
+        }
+
+        console.log('DEBUG: Search entry created, status:', searchResp.status);
+      } catch (err) {
+        console.warn('Could not create search entry:', err.message);
+        // Non-fatal error, continue
+      }
+    }
+
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error('Server error:', error);
