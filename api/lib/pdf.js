@@ -65,7 +65,7 @@ async function addCoverPage(doc, enquiry) {
 
   // Client details
   const bodyY = height - 350;
-  page.drawText(`${enquiry.firstName} ${enquiry.lastName}`, {
+  page.drawText(enquiry.firstName + ' ' + enquiry.lastName, {
     x: 40,
     y: bodyY,
     size: 20,
@@ -73,7 +73,7 @@ async function addCoverPage(doc, enquiry) {
     color: DARK_TEXT,
   });
 
-  page.drawText(`Destination: ${enquiry.destination || 'TBD'}`, {
+  page.drawText('Destination: ' + (enquiry.destination || 'TBD'), {
     x: 40,
     y: bodyY - 40,
     size: 14,
@@ -82,7 +82,7 @@ async function addCoverPage(doc, enquiry) {
   });
 
   page.drawText(
-    `Dates: ${enquiry.startDate || 'TBD'} to ${enquiry.endDate || 'TBD'}`,
+    'Dates: ' + (enquiry.startDate || 'TBD') + ' to ' + (enquiry.endDate || 'TBD'),
     {
       x: 40,
       y: bodyY - 70,
@@ -99,7 +99,7 @@ async function addCoverPage(doc, enquiry) {
     year: 'numeric',
   });
 
-  page.drawText(`Date Prepared: ${dateStr}`, {
+  page.drawText('Date Prepared: ' + dateStr, {
     x: 40,
     y: 60,
     size: 12,
@@ -148,21 +148,21 @@ async function addEnquirySummaryPage(doc, enquiry) {
   y -= 20;
 
   const summaryData = [
-    [`Name: ${enquiry.firstName} ${enquiry.lastName}`],
-    [`Destination: ${enquiry.destination || 'Not specified'}`],
-    [`Check-in: ${enquiry.startDate || 'Not specified'}`],
-    [`Check-out: ${enquiry.endDate || 'Not specified'}`],
-    [`'],
+    ['Name: ' + enquiry.firstName + ' ' + enquiry.lastName],
+    ['Destination: ' + (enquiry.destination || 'Not specified')],
+    ['Check-in: ' + (enquiry.startDate || 'Not specified')],
+    ['Check-out: ' + (enquiry.endDate || 'Not specified')],
+    [''],
     ['Guests & Budget'],
-    [`Adults: ${enquiry.adults || 0}`],
-    [`Children: ${enquiry.children || 0}`],
-    [`Budget: $${enquiry.budget || 0}/week`],
-    [`'],
+    ['Adults: ' + (enquiry.adults || 0)],
+    ['Children: ' + (enquiry.children || 0)],
+    ['Budget: $' + (enquiry.budget || 0) + '/week'],
+    [''],
     ['Yacht Preferences'],
-    [`Type: ${enquiry.yachtType || 'Any'}`],
-    [`Size: ${enquiry.yachtSize || 'Any'}`],
-    [`Style: ${enquiry.yachtStyle || 'Any'}`],
-    [`'],
+    ['Type: ' + (enquiry.yachtType || 'Any')],
+    ['Size: ' + (enquiry.yachtSize || 'Any')],
+    ['Style: ' + (enquiry.yachtStyle || 'Any')],
+    [''],
     ['Amenities Desired'],
     [
       enquiry.amenities && typeof enquiry.amenities === 'string'
@@ -171,11 +171,11 @@ async function addEnquirySummaryPage(doc, enquiry) {
           ? enquiry.amenities.join(', ')
           : 'None specified',
     ],
-    [`'],
+    [''],
     ['Occasion & Special Requirements'],
-    [`Occasion: ${enquiry.occasion || 'Not specified'}`],
+    ['Occasion: ' + (enquiry.occasion || 'Not specified')],
     [
-      `Special Needs: ${enquiry.specialRequirements || 'None'}`,
+      'Special Needs: ' + (enquiry.specialRequirements || 'None'),
     ],
   ];
 
@@ -307,7 +307,7 @@ async function addYachtProfilePage(doc, yacht) {
     borderWidth: 1,
   });
 
-  page.drawText(`Match Score: ${yacht.score}/100`, {
+  page.drawText('Match Score: ' + yacht.score + '/100', {
     x: 50,
     y: y - 20,
     size: 11,
@@ -330,7 +330,7 @@ async function addYachtProfilePage(doc, yacht) {
   }
 
   // Source URL
-  page.drawText(`Source: ${yacht.sourceUrl || yacht.charterWorldUrl || yacht.yachtCharterFleetUrl || 'Database'}`, {
+  page.drawText('Source: ' + (yacht.sourceUrl || yacht.charterWorldUrl || yacht.yachtCharterFleetUrl || 'Database'), {
     x: 40,
     y: 60,
     size: 8,
@@ -346,14 +346,14 @@ function addYachtDetailsColumn(page, font, x, y, yacht, side) {
           ['Type', yacht.type || 'Motor Yacht'],
           ['Builder', yacht.builder || 'Unknown'],
           ['Year', String(yacht.yearBuilt || yacht.year || 'N/A')],
-          ['Length', `${yacht.lengthM || yacht.length || 'N/A'}m`],
+          ['Length', (yacht.lengthM || yacht.length || 'N/A') + 'm'],
           ['Guests', String(yacht.guests || 'N/A')],
           ['Cabins', String(yacht.cabins || 'N/A')],
           ['Crew', String(yacht.crew || 'N/A')],
         ]
       : [
           ['Location', yacht.baseLocation || yacht.location || 'TBD'],
-          ['Weekly Rate', `$${(yacht.weeklyRateUSD || yacht.rate || 'POA').toLocaleString?.() || yacht.weeklyRateUSD || yacht.rate || 'POA'}`],
+          ['Weekly Rate', '$' + ((yacht.weeklyRateUSD || yacht.rate || 'POA').toLocaleString ? (yacht.weeklyRateUSD || yacht.rate || 'POA').toLocaleString() : (yacht.weeklyRateUSD || yacht.rate || 'POA'))],
           ['Style', yacht.style || 'Modern'],
           ['Amenities', yacht.amenities || 'Standard'],
         ];
@@ -469,7 +469,7 @@ async function addPageNumbers(doc) {
     const { height } = page.getSize();
     const pageNum = i + 1;
 
-    page.drawText(`Page ${pageNum} of ${totalPages}`, {
+    page.drawText('Page ' + pageNum + ' of ' + totalPages, {
       x: 40,
       y: 20,
       size: 9,
