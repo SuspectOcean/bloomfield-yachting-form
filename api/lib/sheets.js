@@ -11,15 +11,12 @@ export async function sheetsAction(action, data = {}) {
     redirect: 'manual',
   });
 
-  // Handle Google Apps Script redirect
+  // Google Apps Script returns a 302 redirect to script.googleusercontent.com
+  // The redirect must be followed with GET (not POST) per HTTP spec
   if (resp.status >= 300 && resp.status < 400) {
     const loc = resp.headers.get('location');
     if (loc) {
-      resp = await fetch(loc, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body,
-      });
+      resp = await fetch(loc);
     }
   }
 
