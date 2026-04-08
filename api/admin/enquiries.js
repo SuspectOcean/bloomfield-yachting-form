@@ -8,7 +8,8 @@ export default async function handler(req, res) {
   try {
     console.log('Fetching enquiries from Google Sheets...');
     const data = await sheetsAction('getEnquiries');
-    return res.status(200).json(data);
+    const enquiries = Array.isArray(data) ? data : (data.enquiries || []);
+    return res.status(200).json(enquiries);
   } catch (err) {
     console.error('Error fetching enquiries:', err);
     return res.status(500).json({ error: err.message });
