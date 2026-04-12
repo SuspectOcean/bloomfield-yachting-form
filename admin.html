@@ -256,9 +256,10 @@
     }
 
     // PASSWORD
+    const PASSWORDS = ['Bloomfield', 'Bluff', 'Carlisle', 'Jumby', 'Barbuda'];
     function checkPassword() {
       const pwd = document.getElementById('passwordInput').value;
-      if (pwd === 'Bloomfield') {
+      if (PASSWORDS.includes(pwd)) {
         document.getElementById('passwordScreen').style.display = 'none';
         document.getElementById('dashboard').classList.add('active');
         loadEnquiries();
