@@ -106,6 +106,14 @@ input[type="date"] { cursor: pointer; }
 .radio-group label:has(input:checked), .checkbox-group label:has(input:checked) { border-color: var(--gold); background: rgba(249,115,22,0.08); }
 .radio-group input, .checkbox-group input { accent-color: var(--gold); }
 
+.day-charter-check {
+  display: flex; align-items: center; gap: 6px; margin-top: 8px;
+  font-size: 13px !important; font-weight: 400 !important;
+  text-transform: none !important; letter-spacing: 0 !important;
+  color: var(--text); cursor: pointer;
+}
+.day-charter-check input { accent-color: var(--gold); }
+
 .amenities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 4px; }
 .amenities-grid label {
   display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 400;
@@ -232,8 +240,16 @@ option { font-weight: 400; color: var(--text); padding: 4px 0; }
     <h2 class="section-title">Charter Preferences</h2>
 
     <div class="field-row three-col">
-      <div class="field"><label for="startDate">Preferred Start Date</label><input type="date" id="startDate" name="startDate" required /></div>
-      <div class="field"><label for="endDate">Preferred End Date</label><input type="date" id="endDate" name="endDate" required /></div>
+      <div class="field">
+        <label for="startDate">Preferred Start Date</label>
+        <input type="date" id="startDate" name="startDate" required />
+        <label class="day-charter-check"><input type="checkbox" id="dayCharterStart" name="dayCharterStart" onchange="handleDayCharter('start')" /><span>Day Charter</span></label>
+      </div>
+      <div class="field">
+        <label for="endDate">Preferred End Date</label>
+        <input type="date" id="endDate" name="endDate" required />
+        <label class="day-charter-check"><input type="checkbox" id="dayCharterEnd" name="dayCharterEnd" onchange="handleDayCharter('end')" /><span>Day Charter</span></label>
+      </div>
       <div class="field"><label>Dates Flexible?</label><div class="radio-group"><label><input type="radio" name="datesFlexible" value="Yes" /><span>Yes</span></label><label><input type="radio" name="datesFlexible" value="No" checked /><span>No</span></label></div></div>
     </div>
 
@@ -380,6 +396,34 @@ document.getElementById('startDate').addEventListener('change', function() {
   }
 });
 
+function handleDayCharter(source) {
+  const startCb = document.getElementById('dayCharterStart');
+  const endCb = document.getElementById('dayCharterEnd');
+  const startDate = document.getElementById('startDate');
+  const endDate = document.getElementById('endDate');
+
+  if (source === 'start') endCb.checked = startCb.checked;
+  else startCb.checked = endCb.checked;
+
+  const isDayCharter = startCb.checked;
+
+  if (isDayCharter) {
+    if (startDate.value) endDate.value = startDate.value;
+    endDate.disabled = true;
+    endDate.style.opacity = '0.5';
+  } else {
+    endDate.disabled = false;
+    endDate.style.opacity = '1';
+  }
+}
+
+// Sync end date when start date changes during day charter
+document.getElementById('startDate').addEventListener('change', function() {
+  if (document.getElementById('dayCharterStart').checked) {
+    document.getElementById('endDate').value = this.value;
+  }
+});
+
 async function submitForm(e) {
   e.preventDefault();
 
@@ -401,6 +445,9 @@ async function submitForm(e) {
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Submitting...';
 
+  // Re-enable end date so it submits
+  document.getElementById('endDate').disabled = false;
+
   const form = document.getElementById('charter-form');
   const formData = new FormData(form);
   const data = {};
@@ -409,6 +456,9 @@ async function submitForm(e) {
   // Combine phone code and number
   data.phone = (data.phoneCode || '+44') + ' ' + (data.phone || '');
   delete data.phoneCode;
+
+  // Add day charter flag
+  data.dayCharter = document.getElementById('dayCharterStart').checked;
 
   const checkboxes = ['jacuzzi','spa','gym','helipad','diveGear','cinema','beachClub','waterToys','fishing','jetSkis','consent'];
   checkboxes.forEach(name => { data[name] = form.querySelector('[name="'+name+'"]')?.checked || false; });
