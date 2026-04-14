@@ -402,6 +402,7 @@ function handleDayCharter(source) {
   const startDate = document.getElementById('startDate');
   const endDate = document.getElementById('endDate');
 
+  // Sync both checkboxes
   if (source === 'start') endCb.checked = startCb.checked;
   else startCb.checked = endCb.checked;
 
