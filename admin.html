@@ -3,380 +3,1092 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bloomfield Yachting - Admin Dashboard</title>
+  <title>Bloomfield Yachting — Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { font-family: 'Montserrat', sans-serif; background-color: #faf9f5; color: #0f172a; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #020617; --navy-light: #0f172a; --navy-mid: #1e293b;
+      --gold: #f97316; --gold-light: #fb923c; --gold-dim: rgba(249,115,22,0.15);
+      --cream: #faf9f5; --white: #ffffff;
+      --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1; --gray-400: #94a3b8; --gray-500: #64748b;
+      --gray-600: #475569; --gray-700: #334155; --gray-800: #1e293b;
+      --text: #0f172a;
+      --green: #22c55e; --green-bg: #f0fdf4; --green-text: #166534;
+      --blue: #3b82f6; --blue-bg: #eff6ff; --blue-text: #1e40af;
+      --amber: #f59e0b; --amber-bg: #fffbeb; --amber-text: #92400e;
+      --red: #ef4444; --red-bg: #fef2f2; --red-text: #991b1b;
+      --purple: #8b5cf6; --purple-bg: #f5f3ff; --purple-text: #5b21b6;
+      --cyan: #06b6d4; --cyan-bg: #ecfeff; --cyan-text: #155e75;
+    }
+    html, body { font-family: 'Montserrat', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
 
-    /* PASSWORD SCREEN */
-    .password-screen {
-      display: flex; align-items: center; justify-content: center; min-height: 100vh;
-      background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
-    }
-    .password-card {
-      background: white; border-radius: 8px; padding: 48px 40px; width: 100%; max-width: 400px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center;
-    }
-    .password-card h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 700; color: #020617; margin-bottom: 8px; letter-spacing: 2px; }
-    .password-card p { font-size: 14px; color: #64748b; margin-bottom: 32px; font-weight: 500; }
-    .password-input-group { margin-bottom: 24px; }
-    .password-input-group input {
-      width: 100%; padding: 12px 16px; border: 1px solid #e8e8e8; border-radius: 4px;
-      font-family: 'Montserrat', sans-serif; font-size: 14px; transition: all 0.3s ease;
-    }
-    .password-input-group input:focus { outline: none; border-color: #f97316; box-shadow: 0 0 0 3px rgba(249,115,22,0.1); }
-    .password-btn {
-      width: 100%; padding: 12px 24px; background: #f97316; color: white; border: none; border-radius: 4px;
-      font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
-    }
-    .password-btn:hover { background: #fb923c; }
-    .password-error { color: #ef4444; font-size: 13px; margin-top: 12px; display: none; }
+    /* ─── LOGIN ─── */
+    #login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); }
+    .login-card { background: var(--white); border-radius: 12px; padding: 48px 40px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .login-card h1 { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--navy); letter-spacing: 3px; margin-bottom: 6px; }
+    .login-card .sub { color: var(--gold); font-size: 11px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 30px; }
+    .login-card input { width: 100%; padding: 14px 18px; border: 2px solid var(--gray-200); border-radius: 8px; font-family: inherit; font-size: 15px; text-align: center; letter-spacing: 2px; outline: none; transition: border-color 0.3s; }
+    .login-card input:focus { border-color: var(--gold); }
+    .login-card .error { color: var(--red); font-size: 13px; margin-top: 12px; display: none; }
+    .login-card button { width: 100%; padding: 14px; margin-top: 20px; background: var(--navy); color: var(--gold); border: none; border-radius: 8px; font-family: inherit; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
+    .login-card button:hover { background: var(--navy-light); }
 
-    /* DASHBOARD */
-    .dashboard { display: none; min-height: 100vh; background-color: #faf9f5; }
-    .dashboard.active { display: flex; flex-direction: column; }
+    /* ─── LAYOUT ─── */
+    #app { display: none; min-height: 100vh; }
+    #app.active { display: flex; flex-direction: column; }
+    .header { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--gold); letter-spacing: 2px; }
+    .header .sub { font-size: 11px; color: var(--gray-400); letter-spacing: 1px; }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .header-right .nav-btn { padding: 8px 16px; border-radius: 6px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(249,115,22,0.3); background: transparent; color: var(--gold); }
+    .header-right .nav-btn:hover { background: var(--gold-dim); }
+    .header-right .nav-btn.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+    .logout-btn { padding: 8px 16px; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; }
+    .logout-btn:hover { background: var(--red); color: white; }
 
-    /* HEADER */
-    .dashboard-header {
-      background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
-      padding: 24px 40px; color: white; display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .dashboard-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; letter-spacing: 2px; color: #f97316; }
-    .dashboard-header-subtitle { font-size: 12px; color: #94a3b8; font-weight: 500; letter-spacing: 1px; }
-    .logout-btn {
-      padding: 8px 16px; background: rgba(249,115,22,0.2); border: 1px solid #f97316; color: #f97316;
-      border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.3s ease;
-    }
-    .logout-btn:hover { background: #f97316; color: white; }
+    .main { flex: 1; padding: 32px; overflow-y: auto; }
 
-    /* CONTENT */
-    .dashboard-content { flex: 1; padding: 40px; overflow-y: auto; }
+    /* ─── TABS ─── */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
-    /* ENQUIRIES */
-    .enquiries-header { margin-bottom: 32px; }
-    .enquiries-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #020617; margin-bottom: 8px; }
-    .enquiries-count { font-size: 13px; color: #94a3b8; }
+    /* ─── ENQUIRY LIST ─── */
+    .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .list-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 28px; }
+    .list-header .count { font-size: 13px; color: var(--gray-400); margin-left: 12px; }
+    .filter-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-btn { padding: 6px 14px; border: 1px solid var(--gray-200); border-radius: 20px; background: var(--white); font-family: inherit; font-size: 12px; cursor: pointer; transition: all 0.2s; color: var(--gray-600); }
+    .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .filter-btn.active { background: var(--gold); color: var(--white); border-color: var(--gold); }
+    .search-input { padding: 10px 16px; border: 1px solid var(--gray-200); border-radius: 8px; font-family: inherit; font-size: 13px; width: 260px; outline: none; transition: border-color 0.3s; }
+    .search-input:focus { border-color: var(--gold); }
 
-    .enquiries-list { display: flex; flex-direction: column; gap: 12px; }
-    .enquiry-row {
-      background: white; border: 1px solid #e8e8e8; border-radius: 6px; padding: 20px 24px;
-      cursor: pointer; transition: all 0.3s ease; display: flex; justify-content: space-between; align-items: center;
-    }
-    .enquiry-row:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.08); border-color: #f97316; }
-    .enquiry-info { flex: 1; }
-    .enquiry-name { font-weight: 600; color: #0f172a; font-size: 14px; margin-bottom: 4px; }
-    .enquiry-details { font-size: 12px; color: #64748b; display: flex; gap: 24px; flex-wrap: wrap; }
-    .status-badge {
-      padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 600;
-      letter-spacing: 0.5px; text-transform: uppercase;
-    }
-    .status-enquiry { background: #dbeafe; color: #0c4a6e; }
-    .status-approved { background: #dcfce7; color: #166534; }
+    .enquiry-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: 8px; padding: 18px 24px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; }
+    .enquiry-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-color: var(--gold); }
+    .enquiry-card .name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+    .enquiry-card .meta { font-size: 12px; color: var(--gray-500); display: flex; gap: 20px; flex-wrap: wrap; }
+    .enquiry-card .actions { display: flex; align-items: center; gap: 10px; }
 
-    /* DETAIL PANEL */
-    .detail-panel { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; }
-    .detail-panel.active { display: flex; align-items: center; justify-content: center; }
-    .detail-content {
-      background: white; border-radius: 8px; width: 90%; max-width: 700px; max-height: 90vh; overflow-y: auto;
-      animation: slideUp 0.3s ease;
-    }
-    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    .detail-header {
-      padding: 28px 32px; border-bottom: 1px solid #e8e8e8;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .detail-header h3 { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 700; color: #020617; }
-    .detail-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #94a3b8; padding: 0; }
-    .detail-body { padding: 32px; }
-    .detail-section { margin-bottom: 28px; }
-    .detail-section-title {
-      font-size: 11px; color: #f97316; text-transform: uppercase; letter-spacing: 1.5px;
-      font-weight: 600; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #f0f0f0;
-    }
-    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .detail-field { display: flex; flex-direction: column; }
-    .detail-field.full { grid-column: 1 / -1; }
-    .detail-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 4px; }
-    .detail-value { font-size: 14px; color: #0f172a; font-weight: 500; }
-    .detail-actions { display: flex; gap: 12px; padding-top: 24px; border-top: 1px solid #e8e8e8; }
-    .btn-secondary {
-      flex: 1; padding: 12px 24px; background: white; color: #0f172a; border: 1px solid #e8e8e8;
-      border-radius: 4px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 13px;
-      cursor: pointer; transition: all 0.3s ease;
-    }
-    .btn-secondary:hover { border-color: #0f172a; background: #f9f9f9; }
+    /* Status badges */
+    .badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; }
+    .badge-enquiry { background: var(--blue-bg); color: var(--blue-text); }
+    .badge-contacted { background: var(--cyan-bg); color: var(--cyan-text); }
+    .badge-proposal { background: var(--amber-bg); color: var(--amber-text); }
+    .badge-booked { background: var(--green-bg); color: var(--green-text); }
+    .badge-completed { background: var(--purple-bg); color: var(--purple-text); }
+    .badge-cancelled { background: var(--red-bg); color: var(--red-text); }
 
-    /* PDF LINK */
-    .pdf-link { color: #f97316; text-decoration: none; font-weight: 600; font-size: 13px; }
+    .delete-btn { background: none; border: none; color: var(--gray-400); cursor: pointer; font-size: 18px; padding: 4px 8px; border-radius: 4px; transition: all 0.2s; }
+    .delete-btn:hover { color: var(--red); background: var(--red-bg); }
+
+    /* ─── DETAIL PANEL (slide-over) ─── */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; }
+    .overlay.active { display: block; }
+    .panel { position: fixed; top: 0; right: -620px; width: 600px; max-width: 95vw; height: 100vh; background: var(--white); z-index: 101; transition: right 0.3s ease; overflow-y: auto; box-shadow: -8px 0 30px rgba(0,0,0,0.15); }
+    .panel.active { right: 0; }
+    .panel-header { padding: 24px 28px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: flex-start; position: sticky; top: 0; background: var(--white); z-index: 1; }
+    .panel-header h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; }
+    .panel-header .panel-actions { display: flex; gap: 8px; }
+    .panel-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--gray-400); padding: 0 4px; }
+    .panel-close:hover { color: var(--text); }
+    .panel-body { padding: 28px; }
+
+    /* ─── EDITABLE FIELDS ─── */
+    .section { margin-bottom: 28px; }
+    .section-title { font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-100); }
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field-grid .full { grid-column: 1 / -1; }
+    .field-label { font-size: 11px; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 4px; }
+    .field-value { font-size: 14px; color: var(--text); font-weight: 500; min-height: 20px; }
+    .editable { cursor: pointer; padding: 6px 10px; border-radius: 4px; border: 1px solid transparent; transition: all 0.2s; min-height: 32px; }
+    .editable:hover { border-color: var(--gray-200); background: var(--gray-50); }
+    .edit-input { width: 100%; padding: 8px 10px; border: 1.5px solid var(--gold); border-radius: 4px; font-family: inherit; font-size: 13px; outline: none; background: #fffdf9; }
+    .edit-select { width: 100%; padding: 8px 10px; border: 1.5px solid var(--gold); border-radius: 4px; font-family: inherit; font-size: 13px; outline: none; background: #fffdf9; }
+    .edit-textarea { width: 100%; padding: 8px 10px; border: 1.5px solid var(--gold); border-radius: 4px; font-family: inherit; font-size: 13px; outline: none; min-height: 80px; resize: vertical; background: #fffdf9; }
+
+    /* Status selector in panel */
+    .status-select-wrap { display: inline-flex; align-items: center; gap: 8px; }
+    .status-select { padding: 6px 12px; border: 1.5px solid var(--gray-200); border-radius: 20px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; outline: none; background: var(--white); }
+    .status-select:focus { border-color: var(--gold); }
+
+    /* Notes section */
+    .notes-area { width: 100%; min-height: 100px; padding: 12px; border: 1.5px solid var(--gray-200); border-radius: 6px; font-family: inherit; font-size: 13px; line-height: 1.6; resize: vertical; outline: none; transition: border-color 0.3s; }
+    .notes-area:focus { border-color: var(--gold); }
+    .notes-save-row { display: flex; justify-content: flex-end; margin-top: 8px; }
+
+    /* Yacht chips in enquiry */
+    .yacht-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .yacht-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 20px; font-size: 12px; font-weight: 500; }
+    .yacht-chip a { color: var(--gold); text-decoration: none; }
+    .yacht-chip a:hover { text-decoration: underline; }
+    .yacht-chip .remove { cursor: pointer; color: var(--gray-400); font-size: 14px; }
+    .yacht-chip .remove:hover { color: var(--red); }
+
+    /* ─── YACHT DATABASE TAB ─── */
+    .yacht-table-wrap { overflow-x: auto; }
+    .yacht-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .yacht-table th { padding: 10px 14px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-500); border-bottom: 2px solid var(--gray-200); font-weight: 600; white-space: nowrap; }
+    .yacht-table td { padding: 10px 14px; border-bottom: 1px solid var(--gray-100); vertical-align: top; }
+    .yacht-table tr:hover td { background: var(--gray-50); }
+    .yacht-table .url-cell { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .yacht-table .url-cell a { color: var(--gold); text-decoration: none; }
+    .yacht-table .url-cell a:hover { text-decoration: underline; }
+
+    /* ─── BUTTONS ─── */
+    .btn { padding: 8px 18px; border-radius: 6px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; }
+    .btn-primary { background: var(--gold); color: var(--white); }
+    .btn-primary:hover { background: var(--gold-light); }
+    .btn-secondary { background: var(--white); color: var(--text); border: 1px solid var(--gray-200); }
+    .btn-secondary:hover { border-color: var(--gray-400); }
+    .btn-danger { background: var(--red-bg); color: var(--red-text); border: 1px solid rgba(239,68,68,0.2); }
+    .btn-danger:hover { background: var(--red); color: var(--white); }
+    .btn-sm { padding: 5px 12px; font-size: 11px; }
+
+    /* ─── CONFIRM MODAL ─── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: var(--white); border-radius: 12px; padding: 32px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .modal h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; margin-bottom: 12px; }
+    .modal p { color: var(--gray-500); font-size: 14px; margin-bottom: 24px; line-height: 1.5; }
+    .modal .modal-btns { display: flex; gap: 12px; justify-content: center; }
+    .modal .modal-btns .btn { min-width: 100px; padding: 10px 24px; }
+
+    /* ─── TOAST ─── */
+    .toast { position: fixed; bottom: 24px; right: 24px; padding: 14px 22px; border-radius: 8px; font-size: 13px; font-weight: 500; z-index: 300; animation: slideIn 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .toast-success { background: var(--green-bg); color: var(--green-text); border: 1px solid var(--green); }
+    .toast-error { background: var(--red-bg); color: var(--red-text); border: 1px solid var(--red); }
+    @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    /* ─── LOADING ─── */
+    .loading { text-align: center; padding: 60px; color: var(--gray-400); }
+    .spinner { width: 28px; height: 28px; border: 3px solid var(--gray-200); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--gray-400); }
+    .empty-state p { font-size: 14px; }
+
+    /* PDF link */
+    .pdf-link { color: var(--gold); text-decoration: none; font-weight: 600; font-size: 13px; }
     .pdf-link:hover { text-decoration: underline; }
 
-    /* TOAST */
-    .toast {
-      position: fixed; bottom: 24px; right: 24px; background: white; border: 1px solid #e8e8e8;
-      border-radius: 6px; padding: 16px 24px; box-shadow: 0 12px 32px rgba(0,0,0,0.12);
-      z-index: 2000; max-width: 400px; animation: slideIn 0.3s ease;
-    }
-    @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    .toast.error { border-color: #dc2626; background: #fef2f2; }
-    .toast.success { border-color: #22c55e; background: #f0fdf4; }
-    .toast-message { font-size: 13px; font-weight: 500; }
-    .toast.error .toast-message { color: #7f1d1d; }
-    .toast.success .toast-message { color: #166534; }
-
-    /* LOADING */
-    .loading { text-align: center; padding: 60px; color: #94a3b8; font-size: 14px; }
-    .spinner { width: 32px; height: 32px; border: 3px solid #f1f5f9; border-top-color: #f97316; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px; }
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-    /* RESPONSIVE */
+    /* Responsive */
     @media (max-width: 768px) {
-      .dashboard-content { padding: 24px; }
-      .detail-grid { grid-template-columns: 1fr; }
-      .password-card { margin: 20px; }
+      .main { padding: 20px; }
+      .field-grid { grid-template-columns: 1fr; }
+      .filter-bar { flex-direction: column; }
+      .search-input { width: 100%; }
+      .panel { width: 100%; max-width: 100vw; }
     }
+
+    /* Add yacht form within panel */
+    .add-yacht-form { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 16px; margin-top: 12px; }
+    .add-yacht-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .add-yacht-form .form-row.full { grid-template-columns: 1fr; }
+    .add-yacht-form label { font-size: 11px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; display: block; margin-bottom: 3px; }
+    .add-yacht-form input, .add-yacht-form select, .add-yacht-form textarea { width: 100%; padding: 7px 10px; border: 1px solid var(--gray-200); border-radius: 4px; font-family: inherit; font-size: 12px; outline: none; }
+    .add-yacht-form input:focus, .add-yacht-form select:focus, .add-yacht-form textarea:focus { border-color: var(--gold); }
+    .add-yacht-form textarea { min-height: 50px; resize: vertical; }
+    .add-yacht-form .form-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+
+    /* Yacht DB add form */
+    .yacht-db-form { background: var(--white); border: 1px solid var(--gray-200); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+    .yacht-db-form h3 { font-family: 'Cormorant Garamond', serif; font-size: 18px; margin-bottom: 16px; }
+    .yacht-db-form .form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .yacht-db-form .form-grid .span-2 { grid-column: span 2; }
+    .yacht-db-form label { font-size: 11px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; display: block; margin-bottom: 3px; }
+    .yacht-db-form input, .yacht-db-form select, .yacht-db-form textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--gray-200); border-radius: 4px; font-family: inherit; font-size: 13px; outline: none; }
+    .yacht-db-form input:focus, .yacht-db-form select:focus { border-color: var(--gold); }
+    @media (max-width: 768px) { .yacht-db-form .form-grid { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
 
-  <!-- PASSWORD SCREEN -->
-  <div class="password-screen" id="passwordScreen">
-    <div class="password-card">
+<!-- ═══════════ LOGIN ═══════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <h1>BLOOMFIELD YACHTING</h1>
+    <div class="sub">Admin Dashboard</div>
+    <input type="password" id="login-pw" placeholder="Password" />
+    <div class="error" id="login-error">Invalid password</div>
+    <button id="login-btn">Enter</button>
+  </div>
+</div>
+
+<!-- ═══════════ APP ═══════════ -->
+<div id="app">
+  <div class="header">
+    <div>
       <h1>BLOOMFIELD YACHTING</h1>
-      <p>Admin Dashboard</p>
-      <div class="password-input-group">
-        <input type="password" id="passwordInput" placeholder="Password" />
-      </div>
-      <button class="password-btn" onclick="checkPassword()">Enter</button>
-      <div class="password-error" id="passwordError">Incorrect password</div>
+      <div class="sub">Admin Dashboard</div>
+    </div>
+    <div class="header-right">
+      <button class="nav-btn active" data-tab="enquiries">Enquiries</button>
+      <button class="nav-btn" data-tab="yachts">Yacht Database</button>
+      <button class="logout-btn" id="logout-btn">Logout</button>
     </div>
   </div>
 
-  <!-- MAIN DASHBOARD -->
-  <div class="dashboard" id="dashboard">
-    <div class="dashboard-header">
-      <div>
-        <h1>BLOOMFIELD YACHTING</h1>
-        <div class="dashboard-header-subtitle">Admin Dashboard</div>
+  <div class="main">
+    <!-- ─── ENQUIRIES TAB ─── -->
+    <div class="tab-content active" id="tab-enquiries">
+      <div class="list-header">
+        <div style="display:flex;align-items:baseline;">
+          <h2>Enquiries</h2>
+          <span class="count" id="enquiry-count"></span>
+        </div>
+        <input type="text" class="search-input" id="search-input" placeholder="Search by name, destination, status..." />
       </div>
-      <button class="logout-btn" onclick="logout()">Logout</button>
-    </div>
-
-    <div class="dashboard-content">
-      <div class="enquiries-header">
-        <h2>Enquiries</h2>
-        <div class="enquiries-count" id="enquiries-count"></div>
+      <div class="filter-bar" id="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="Enquiry">Enquiry</button>
+        <button class="filter-btn" data-filter="Contacted">Contacted</button>
+        <button class="filter-btn" data-filter="Proposal Sent">Proposal Sent</button>
+        <button class="filter-btn" data-filter="Booked">Booked</button>
+        <button class="filter-btn" data-filter="Completed">Completed</button>
+        <button class="filter-btn" data-filter="Cancelled">Cancelled</button>
       </div>
-      <div id="enquiries-list" class="enquiries-list">
+      <div id="enquiry-list">
         <div class="loading"><div class="spinner"></div>Loading enquiries...</div>
       </div>
     </div>
-  </div>
 
-  <!-- DETAIL PANEL -->
-  <div class="detail-panel" id="detail-panel">
-    <div class="detail-content">
-      <div class="detail-header">
-        <h3 id="detail-name">Enquiry Details</h3>
-        <button class="detail-close" onclick="closeDetail()">&times;</button>
+    <!-- ─── YACHT DATABASE TAB ─── -->
+    <div class="tab-content" id="tab-yachts">
+      <div class="list-header">
+        <div style="display:flex;align-items:baseline;">
+          <h2>Yacht Database</h2>
+          <span class="count" id="yacht-count"></span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <input type="text" class="search-input" id="yacht-search" placeholder="Search yachts..." />
+          <button class="btn btn-primary" id="add-yacht-db-btn">+ Add Yacht</button>
+        </div>
       </div>
-      <div class="detail-body">
-        <!-- Client Details -->
-        <div class="detail-section">
-          <div class="detail-section-title">Client Details</div>
-          <div class="detail-grid">
-            <div class="detail-field"><div class="detail-label">Name</div><div class="detail-value" id="d-name">—</div></div>
-            <div class="detail-field"><div class="detail-label">Email</div><div class="detail-value" id="d-email">—</div></div>
-            <div class="detail-field"><div class="detail-label">Phone</div><div class="detail-value" id="d-phone">—</div></div>
-            <div class="detail-field"><div class="detail-label">Nationality</div><div class="detail-value" id="d-nationality">—</div></div>
-          </div>
+
+      <!-- Add yacht form (hidden by default) -->
+      <div class="yacht-db-form" id="yacht-db-form" style="display:none;">
+        <h3>Add New Yacht</h3>
+        <div class="form-grid">
+          <div><label>Yacht Name *</label><input type="text" id="yf-name" /></div>
+          <div><label>Type</label><select id="yf-type"><option value="">Select...</option><option>Motor Yacht</option><option>Sailing Yacht</option><option>Catamaran</option><option>Gulet</option></select></div>
+          <div><label>Size (metres)</label><input type="text" id="yf-size" placeholder="e.g. 45" /></div>
+          <div><label>Weekly Rate (USD)</label><input type="text" id="yf-rate" placeholder="e.g. 75000" /></div>
+          <div><label>Builder/Brand</label><input type="text" id="yf-builder" /></div>
+          <div><label>Year Built</label><input type="text" id="yf-year" /></div>
+          <div><label>Max Guests</label><input type="text" id="yf-guests" /></div>
+          <div><label>Cabins</label><input type="text" id="yf-cabins" /></div>
+          <div><label>Crew</label><input type="text" id="yf-crew" /></div>
+          <div><label>Home Port / Region</label><input type="text" id="yf-region" /></div>
+          <div class="span-2"><label>Listing URL</label><input type="text" id="yf-url" placeholder="https://..." /></div>
+          <div class="span-2"><label>Amenities</label><input type="text" id="yf-amenities" placeholder="Jacuzzi, Water Toys, Gym..." /></div>
+          <div class="span-2"><label>Notes</label><input type="text" id="yf-notes" /></div>
         </div>
-        <!-- Charter Preferences -->
-        <div class="detail-section">
-          <div class="detail-section-title">Charter Preferences</div>
-          <div class="detail-grid">
-            <div class="detail-field"><div class="detail-label">Destination</div><div class="detail-value" id="d-destination">—</div></div>
-            <div class="detail-field"><div class="detail-label">Travel Dates</div><div class="detail-value" id="d-dates">—</div></div>
-            <div class="detail-field"><div class="detail-label">Trip Length</div><div class="detail-value" id="d-tripdays">—</div></div>
-            <div class="detail-field"><div class="detail-label">Budget (USD/week)</div><div class="detail-value" id="d-budget">—</div></div>
-            <div class="detail-field"><div class="detail-label">Adults</div><div class="detail-value" id="d-adults">—</div></div>
-            <div class="detail-field"><div class="detail-label">Children</div><div class="detail-value" id="d-children">—</div></div>
-          </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
+          <button class="btn btn-secondary" id="yf-cancel">Cancel</button>
+          <button class="btn btn-primary" id="yf-save">Save Yacht</button>
         </div>
-        <!-- Yacht Preferences -->
-        <div class="detail-section">
-          <div class="detail-section-title">Yacht Preferences</div>
-          <div class="detail-grid">
-            <div class="detail-field"><div class="detail-label">Yacht Type</div><div class="detail-value" id="d-yachttype">—</div></div>
-            <div class="detail-field"><div class="detail-label">Preferred Size</div><div class="detail-value" id="d-yachtsize">—</div></div>
-            <div class="detail-field"><div class="detail-label">Style</div><div class="detail-value" id="d-yachtstyle">—</div></div>
-            <div class="detail-field"><div class="detail-label">Amenities</div><div class="detail-value" id="d-amenities">—</div></div>
-          </div>
-        </div>
-        <!-- Additional -->
-        <div class="detail-section">
-          <div class="detail-section-title">Additional</div>
-          <div class="detail-grid">
-            <div class="detail-field"><div class="detail-label">Occasion</div><div class="detail-value" id="d-occasion">—</div></div>
-            <div class="detail-field full"><div class="detail-label">Special Requirements</div><div class="detail-value" id="d-requirements">—</div></div>
-          </div>
-        </div>
-        <!-- PDF Link -->
-        <div class="detail-section" id="d-pdf-section" style="display:none;">
-          <div class="detail-section-title">Form PDF</div>
-          <a class="pdf-link" id="d-pdf-link" href="#" target="_blank">View Submitted Form (PDF)</a>
-        </div>
-        <div class="detail-actions">
-          <button class="btn-secondary" onclick="closeDetail()">Close</button>
-        </div>
+      </div>
+
+      <div class="yacht-table-wrap">
+        <table class="yacht-table" id="yacht-table">
+          <thead>
+            <tr>
+              <th>ID</th><th>Name</th><th>Type</th><th>Size</th><th>Rate/wk</th>
+              <th>Builder</th><th>Guests</th><th>Region</th><th>Listing</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="yacht-tbody"></tbody>
+        </table>
+      </div>
+      <div id="yacht-empty" class="empty-state" style="display:none;">
+        <p>No yachts in the database yet. Add your first yacht above.</p>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- TOAST -->
-  <div class="toast" id="toast" style="display: none;">
-    <div class="toast-message" id="toast-message"></div>
+<!-- ═══════════ DETAIL PANEL (slide-over) ═══════════ -->
+<div class="overlay" id="overlay"></div>
+<div class="panel" id="panel">
+  <div class="panel-header">
+    <div>
+      <h3 id="panel-name">Enquiry Details</h3>
+      <div id="panel-status-wrap" class="status-select-wrap" style="margin-top:8px;">
+        <select class="status-select" id="panel-status">
+          <option value="Enquiry">Enquiry</option>
+          <option value="Contacted">Contacted</option>
+          <option value="Proposal Sent">Proposal Sent</option>
+          <option value="Booked">Booked</option>
+          <option value="Completed">Completed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+    </div>
+    <div class="panel-actions">
+      <button class="btn btn-danger btn-sm" id="panel-delete">Delete</button>
+      <button class="panel-close" id="panel-close">&times;</button>
+    </div>
   </div>
+  <div class="panel-body">
 
-  <script>
-    // STATE
-    const state = { enquiries: [] };
+    <!-- Client Details -->
+    <div class="section">
+      <div class="section-title">Client Details</div>
+      <div class="field-grid">
+        <div><div class="field-label">First Name</div><div class="editable" data-field="firstName" id="pf-firstName"></div></div>
+        <div><div class="field-label">Last Name</div><div class="editable" data-field="lastName" id="pf-lastName"></div></div>
+        <div><div class="field-label">Email</div><div class="editable" data-field="email" id="pf-email"></div></div>
+        <div><div class="field-label">Phone</div><div class="editable" data-field="phone" id="pf-phone"></div></div>
+        <div><div class="field-label">Nationality</div><div class="editable" data-field="nationality" id="pf-nationality"></div></div>
+        <div><div class="field-label">Referred By</div><div class="editable" data-field="referredBy" id="pf-referredBy"></div></div>
+        <div><div class="field-label">Member ID</div><div class="editable" data-field="memberId" id="pf-memberId"></div></div>
+      </div>
+    </div>
 
-    // API HELPER
-    async function api(method, path, body) {
-      const opts = { method, headers: { 'Content-Type': 'application/json' } };
-      if (body) opts.body = JSON.stringify(body);
-      const res = await fetch(path, opts);
-      if (!res.ok) {
-        const error = await res.text();
-        throw new Error(error || 'API error: ' + res.status);
-      }
-      return res.json();
-    }
+    <!-- Charter Preferences -->
+    <div class="section">
+      <div class="section-title">Charter Preferences</div>
+      <div class="field-grid">
+        <div><div class="field-label">Pick Up</div><div class="editable" data-field="pickUp" id="pf-pickUp"></div></div>
+        <div><div class="field-label">Drop Off</div><div class="editable" data-field="dropOff" id="pf-dropOff"></div></div>
+        <div><div class="field-label">Start Date</div><div class="editable" data-field="startDate" data-type="date" id="pf-startDate"></div></div>
+        <div><div class="field-label">End Date</div><div class="editable" data-field="endDate" data-type="date" id="pf-endDate"></div></div>
+        <div><div class="field-label">Trip Length</div><div class="field-value" id="pf-tripDays"></div></div>
+        <div><div class="field-label">Budget (USD/wk)</div><div class="editable" data-field="budget" id="pf-budget"></div></div>
+        <div><div class="field-label">Adults</div><div class="editable" data-field="adults" id="pf-adults"></div></div>
+        <div><div class="field-label">Children</div><div class="editable" data-field="children" id="pf-children"></div></div>
+        <div><div class="field-label">Dates Flexible</div><div class="field-value" id="pf-datesFlexible"></div></div>
+        <div><div class="field-label">Destination Flexible</div><div class="field-value" id="pf-destFlexible"></div></div>
+      </div>
+    </div>
 
-    // PASSWORD
-    const PASSWORDS = ['Bloomfield', 'Bluff', 'Carlisle', 'Jumby', 'Barbuda'];
-    function checkPassword() {
-      const pwd = document.getElementById('passwordInput').value;
-      if (PASSWORDS.includes(pwd)) {
-        document.getElementById('passwordScreen').style.display = 'none';
-        document.getElementById('dashboard').classList.add('active');
-        loadEnquiries();
-      } else {
-        document.getElementById('passwordError').style.display = 'block';
-        document.getElementById('passwordInput').value = '';
-        setTimeout(() => { document.getElementById('passwordError').style.display = 'none'; }, 3000);
-      }
-    }
-    document.getElementById('passwordInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
+    <!-- Yacht Preferences -->
+    <div class="section">
+      <div class="section-title">Yacht Preferences</div>
+      <div class="field-grid">
+        <div><div class="field-label">Yacht Type</div><div class="editable" data-field="yachtType" id="pf-yachtType"></div></div>
+        <div><div class="field-label">Preferred Size</div><div class="editable" data-field="yachtSize" id="pf-yachtSize"></div></div>
+        <div><div class="field-label">Style</div><div class="editable" data-field="yachtStyle" id="pf-yachtStyle"></div></div>
+        <div><div class="field-label">Amenities</div><div class="editable" data-field="amenities" id="pf-amenities"></div></div>
+      </div>
+    </div>
 
-    // LOGOUT
-    function logout() {
-      document.getElementById('passwordScreen').style.display = 'flex';
-      document.getElementById('dashboard').classList.remove('active');
-      document.getElementById('passwordInput').value = '';
-    }
+    <!-- Occasion -->
+    <div class="section">
+      <div class="section-title">Occasion &amp; Requirements</div>
+      <div class="field-grid">
+        <div><div class="field-label">Occasion</div><div class="editable" data-field="occasion" id="pf-occasion"></div></div>
+        <div class="full"><div class="field-label">Special Requirements</div><div class="editable" data-field="specialRequirements" id="pf-specialReq"></div></div>
+      </div>
+    </div>
 
-    // LOAD ENQUIRIES
-    async function loadEnquiries() {
-      try {
-        const data = await api('GET', '/api/admin/enquiries');
-        state.enquiries = Array.isArray(data) ? data : (data.enquiries || []);
-        renderEnquiries();
-      } catch (error) {
-        document.getElementById('enquiries-list').innerHTML = '<div class="loading" style="color:#dc2626;">Failed to load enquiries. <a href="#" onclick="loadEnquiries();return false;" style="color:#f97316;">Retry</a></div>';
-        showToast('Failed to load enquiries: ' + error.message, 'error');
-      }
-    }
+    <!-- PDF -->
+    <div class="section" id="panel-pdf-section" style="display:none;">
+      <div class="section-title">Enquiry Form</div>
+      <a class="pdf-link" id="panel-pdf-link" href="#" target="_blank">View Original PDF</a>
+    </div>
 
-    // RENDER ENQUIRIES
-    function renderEnquiries() {
-      const list = document.getElementById('enquiries-list');
-      const count = document.getElementById('enquiries-count');
+    <!-- Internal Notes -->
+    <div class="section">
+      <div class="section-title">Internal Notes</div>
+      <textarea class="notes-area" id="panel-notes" placeholder="Add internal notes about this enquiry..."></textarea>
+      <div class="notes-save-row">
+        <button class="btn btn-primary btn-sm" id="save-notes-btn">Save Notes</button>
+      </div>
+    </div>
 
-      if (state.enquiries.length === 0) {
-        list.innerHTML = '<div class="loading">No enquiries yet.</div>';
-        count.textContent = '';
-        return;
-      }
-
-      count.textContent = state.enquiries.length + ' enquir' + (state.enquiries.length === 1 ? 'y' : 'ies');
-
-      list.innerHTML = state.enquiries.map(e => `
-        <div class="enquiry-row" onclick="selectEnquiry('${e.id}')">
-          <div class="enquiry-info">
-            <div class="enquiry-name">${e.firstName || ''} ${e.lastName || ''}</div>
-            <div class="enquiry-details">
-              <span>${e.destination || '—'}</span>
-              <span>${e.startDate || '—'} → ${e.endDate || '—'}</span>
-              <span>${e.budget ? '$' + e.budget : '—'}</span>
-            </div>
-          </div>
-          <div class="status-badge status-${(e.status || 'enquiry').toLowerCase()}">${e.status || 'Enquiry'}</div>
+    <!-- Linked Yachts -->
+    <div class="section">
+      <div class="section-title">Yachts Viewed / Shortlisted</div>
+      <div class="yacht-chips" id="panel-yacht-chips"></div>
+      <div style="margin-top:12px;">
+        <button class="btn btn-secondary btn-sm" id="link-yacht-btn">+ Link Yacht</button>
+      </div>
+      <!-- Inline link form -->
+      <div id="link-yacht-form" style="display:none;" class="add-yacht-form">
+        <p style="font-size:12px;color:var(--gray-500);margin-bottom:10px;">Search existing yachts or add a new one</p>
+        <div style="margin-bottom:10px;">
+          <select id="link-yacht-select" style="width:100%;padding:8px;border:1px solid var(--gray-200);border-radius:4px;font-family:inherit;font-size:13px;">
+            <option value="">Select existing yacht...</option>
+          </select>
         </div>
-      `).join('');
+        <div style="text-align:center;color:var(--gray-400);font-size:11px;margin-bottom:10px;">— or add new —</div>
+        <div class="form-row">
+          <div><label>Yacht Name *</label><input type="text" id="ly-name" /></div>
+          <div><label>Type</label><select id="ly-type"><option value="">Select...</option><option>Motor Yacht</option><option>Sailing Yacht</option><option>Catamaran</option><option>Gulet</option></select></div>
+        </div>
+        <div class="form-row">
+          <div><label>Size (m)</label><input type="text" id="ly-size" /></div>
+          <div><label>Rate (USD/wk)</label><input type="text" id="ly-rate" /></div>
+        </div>
+        <div class="form-row">
+          <div><label>Region</label><input type="text" id="ly-region" /></div>
+          <div><label>Builder</label><input type="text" id="ly-builder" /></div>
+        </div>
+        <div class="form-row full">
+          <div><label>Listing URL</label><input type="text" id="ly-url" /></div>
+        </div>
+        <div class="form-row full">
+          <div><label>Notes</label><input type="text" id="ly-notes" /></div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-secondary btn-sm" id="ly-cancel">Cancel</button>
+          <button class="btn btn-primary btn-sm" id="ly-link-existing">Link Selected</button>
+          <button class="btn btn-primary btn-sm" id="ly-add-new">Add &amp; Link</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════ CONFIRM MODAL ═══════════ -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal">
+    <h3 id="confirm-title">Are you sure?</h3>
+    <p id="confirm-msg">This action cannot be undone.</p>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" id="confirm-cancel">Cancel</button>
+      <button class="btn btn-danger" id="confirm-ok">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TOAST ═══════════ -->
+<div id="toast" style="display:none;"></div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════ */
+let authToken = null;
+let enquiries = [];
+let yachts = [];
+let currentEnquiry = null;
+let currentFilter = 'all';
+let confirmCallback = null;
+
+const STATUSES = ['Enquiry', 'Contacted', 'Proposal Sent', 'Booked', 'Completed', 'Cancelled'];
+const STATUS_CLASS = {
+  'Enquiry': 'badge-enquiry', 'Contacted': 'badge-contacted',
+  'Proposal Sent': 'badge-proposal', 'Booked': 'badge-booked',
+  'Completed': 'badge-completed', 'Cancelled': 'badge-cancelled'
+};
+
+
+/* ═══════════════════════════════════════════════
+   API HELPERS
+   ═══════════════════════════════════════════════ */
+async function api(method, path, body) {
+  const opts = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + (authToken || '')
+    }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(path, opts);
+  if (res.status === 401) {
+    toast('Session expired. Please log in again.', 'error');
+    logout();
+    throw new Error('Unauthorized');
+  }
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(err || 'API error: ' + res.status);
+  }
+  return res.json();
+}
+
+
+/* ═══════════════════════════════════════════════
+   AUTH
+   ═══════════════════════════════════════════════ */
+document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('login-btn').addEventListener('click', doLogin);
+document.getElementById('logout-btn').addEventListener('click', logout);
+
+async function doLogin() {
+  const pw = document.getElementById('login-pw').value;
+  try {
+    const data = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw })
+    }).then(r => r.json());
+
+    if (data.token) {
+      authToken = data.token;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').classList.add('active');
+      loadEnquiries();
+      loadYachts();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+      document.getElementById('login-pw').value = '';
+    }
+  } catch {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function logout() {
+  authToken = null;
+  document.getElementById('app').classList.remove('active');
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-pw').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+
+/* ═══════════════════════════════════════════════
+   TABS
+   ═══════════════════════════════════════════════ */
+document.querySelectorAll('.nav-btn[data-tab]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+
+/* ═══════════════════════════════════════════════
+   ENQUIRY LIST
+   ═══════════════════════════════════════════════ */
+async function loadEnquiries() {
+  try {
+    const data = await api('GET', '/api/admin/enquiries');
+    enquiries = Array.isArray(data) ? data : (data.enquiries || []);
+    renderEnquiries();
+  } catch (err) {
+    document.getElementById('enquiry-list').innerHTML =
+      '<div class="empty-state"><p style="color:var(--red);">Failed to load. <a href="#" onclick="loadEnquiries();return false;" style="color:var(--gold);">Retry</a></p></div>';
+  }
+}
+
+function renderEnquiries() {
+  const list = document.getElementById('enquiry-list');
+  const count = document.getElementById('enquiry-count');
+  const searchTerm = (document.getElementById('search-input').value || '').toLowerCase();
+
+  let filtered = enquiries;
+  if (currentFilter !== 'all') {
+    filtered = filtered.filter(e => e.status === currentFilter);
+  }
+  if (searchTerm) {
+    filtered = filtered.filter(e => {
+      const haystack = [e.firstName, e.lastName, e.email, e.pickUp, e.destination, e.status, e.budget].join(' ').toLowerCase();
+      return haystack.includes(searchTerm);
+    });
+  }
+
+  count.textContent = filtered.length + ' of ' + enquiries.length;
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-state"><p>No enquiries match your filters.</p></div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(e => `
+    <div class="enquiry-card" data-id="${e.id}">
+      <div onclick="openEnquiry('${e.id}')" style="flex:1;cursor:pointer;">
+        <div class="name">${esc(e.firstName)} ${esc(e.lastName)}</div>
+        <div class="meta">
+          <span>${esc(e.pickUp || e.destination || '—')}</span>
+          <span>${esc(e.startDate || '—')} → ${esc(e.endDate || '—')}</span>
+          <span>${esc(e.budget || '—')}</span>
+        </div>
+      </div>
+      <div class="actions">
+        <span class="badge ${STATUS_CLASS[e.status] || 'badge-enquiry'}">${esc(e.status || 'Enquiry')}</span>
+        <button class="delete-btn" onclick="event.stopPropagation();confirmDelete('${e.id}','${esc(e.firstName)} ${esc(e.lastName)}')" title="Delete">&times;</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Search
+document.getElementById('search-input').addEventListener('input', renderEnquiries);
+
+// Filters
+document.getElementById('filter-bar').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = btn.dataset.filter;
+  renderEnquiries();
+});
+
+
+/* ═══════════════════════════════════════════════
+   DELETE WITH CONFIRMATION
+   ═══════════════════════════════════════════════ */
+function confirmDelete(id, name) {
+  document.getElementById('confirm-title').textContent = 'Delete Enquiry';
+  document.getElementById('confirm-msg').textContent = `Are you sure you want to permanently delete the enquiry for ${name}? This cannot be undone.`;
+  document.getElementById('confirm-ok').textContent = 'Delete';
+  document.getElementById('confirm-modal').classList.add('active');
+  confirmCallback = async () => {
+    try {
+      await api('DELETE', '/api/admin/enquiries', { enquiryId: id });
+      enquiries = enquiries.filter(e => e.id !== id);
+      renderEnquiries();
+      closePanel();
+      toast('Enquiry deleted', 'success');
+    } catch (err) {
+      toast('Failed to delete: ' + err.message, 'error');
+    }
+  };
+}
+
+document.getElementById('confirm-ok').addEventListener('click', () => {
+  document.getElementById('confirm-modal').classList.remove('active');
+  if (confirmCallback) confirmCallback();
+  confirmCallback = null;
+});
+document.getElementById('confirm-cancel').addEventListener('click', () => {
+  document.getElementById('confirm-modal').classList.remove('active');
+  confirmCallback = null;
+});
+
+
+/* ═══════════════════════════════════════════════
+   DETAIL PANEL
+   ═══════════════════════════════════════════════ */
+function openEnquiry(id) {
+  const e = enquiries.find(en => en.id === id);
+  if (!e) return;
+  currentEnquiry = e;
+
+  document.getElementById('panel-name').textContent = (e.firstName || '') + ' ' + (e.lastName || '');
+  document.getElementById('panel-status').value = e.status || 'Enquiry';
+
+  // Populate editable fields
+  const fields = {
+    firstName: e.firstName, lastName: e.lastName, email: e.email, phone: e.phone,
+    nationality: e.nationality, referredBy: e.referredBy, memberId: e.memberId,
+    pickUp: e.pickUp, dropOff: e.dropOff, startDate: e.startDate, endDate: e.endDate,
+    budget: e.budget, adults: e.adults, children: e.children,
+    yachtType: e.yachtType, yachtSize: e.yachtSize, yachtStyle: e.yachtStyle,
+    amenities: e.amenities, occasion: e.occasion, specialRequirements: e.specialRequirements
+  };
+  for (const [key, val] of Object.entries(fields)) {
+    const el = document.getElementById('pf-' + key);
+    if (el) el.textContent = val || '—';
+  }
+
+  // Non-editable
+  document.getElementById('pf-tripDays').textContent = e.tripDays ? e.tripDays + ' days' : '—';
+  document.getElementById('pf-datesFlexible').textContent = e.datesFlexible || '—';
+  document.getElementById('pf-destFlexible').textContent = e.destinationFlexible || '—';
+
+  // PDF
+  if (e.pdfUrl) {
+    document.getElementById('panel-pdf-section').style.display = '';
+    document.getElementById('panel-pdf-link').href = e.pdfUrl;
+  } else {
+    document.getElementById('panel-pdf-section').style.display = 'none';
+  }
+
+  // Notes
+  document.getElementById('panel-notes').value = e.internalNotes || '';
+
+  // Load linked yachts
+  renderLinkedYachts();
+
+  // Hide link form
+  document.getElementById('link-yacht-form').style.display = 'none';
+
+  // Show panel
+  document.getElementById('overlay').classList.add('active');
+  document.getElementById('panel').classList.add('active');
+}
+
+function closePanel() {
+  document.getElementById('overlay').classList.remove('active');
+  document.getElementById('panel').classList.remove('active');
+  currentEnquiry = null;
+}
+
+document.getElementById('panel-close').addEventListener('click', closePanel);
+document.getElementById('overlay').addEventListener('click', closePanel);
+document.getElementById('panel-delete').addEventListener('click', () => {
+  if (!currentEnquiry) return;
+  confirmDelete(currentEnquiry.id, currentEnquiry.firstName + ' ' + currentEnquiry.lastName);
+});
+
+
+/* ═══════════════════════════════════════════════
+   INLINE EDITING (click to edit)
+   ═══════════════════════════════════════════════ */
+document.querySelectorAll('.editable').forEach(el => {
+  el.addEventListener('click', function() {
+    if (this.querySelector('input, textarea')) return; // already editing
+    const field = this.dataset.field;
+    const type = this.dataset.type || 'text';
+    const current = currentEnquiry ? (currentEnquiry[field] || '') : '';
+
+    let input;
+    if (field === 'specialRequirements' || field === 'amenities') {
+      input = document.createElement('textarea');
+      input.className = 'edit-textarea';
+    } else if (type === 'date') {
+      input = document.createElement('input');
+      input.type = 'date';
+      input.className = 'edit-input';
+    } else {
+      input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'edit-input';
     }
 
-    // SELECT ENQUIRY
-    function selectEnquiry(id) {
-      const e = state.enquiries.find(en => en.id === id);
-      if (!e) return;
-      renderDetail(e);
-      document.getElementById('detail-panel').classList.add('active');
-    }
+    input.value = current === '—' ? '' : current;
+    this.textContent = '';
+    this.appendChild(input);
+    input.focus();
 
-    // RENDER DETAIL
-    function renderDetail(e) {
-      document.getElementById('detail-name').textContent = (e.firstName || '') + ' ' + (e.lastName || '');
-      document.getElementById('d-name').textContent = (e.firstName || '') + ' ' + (e.lastName || '') || '—';
-      document.getElementById('d-email').textContent = e.email || '—';
-      document.getElementById('d-phone').textContent = e.phone || '—';
-      document.getElementById('d-nationality').textContent = e.nationality || '—';
-      document.getElementById('d-destination').textContent = e.destination || '—';
-      document.getElementById('d-dates').textContent = (e.startDate || '—') + ' → ' + (e.endDate || '—');
-      document.getElementById('d-tripdays').textContent = e.tripDays ? e.tripDays + ' days' : '—';
-      document.getElementById('d-budget').textContent = e.budget ? '$' + e.budget : '—';
-      document.getElementById('d-adults').textContent = e.adults || '—';
-      document.getElementById('d-children').textContent = e.children || '0';
-      document.getElementById('d-yachttype').textContent = e.yachtType || '—';
-      document.getElementById('d-yachtsize').textContent = e.yachtSize || '—';
-      document.getElementById('d-yachtstyle').textContent = e.yachtStyle || '—';
-      document.getElementById('d-amenities').textContent = e.amenities || '—';
-      document.getElementById('d-occasion').textContent = e.occasion || '—';
-      document.getElementById('d-requirements').textContent = e.specialRequirements || '—';
-
-      // PDF link
-      const pdfSection = document.getElementById('d-pdf-section');
-      const pdfLink = document.getElementById('d-pdf-link');
-      if (e.pdfUrl) {
-        pdfSection.style.display = 'block';
-        pdfLink.href = e.pdfUrl;
-      } else {
-        pdfSection.style.display = 'none';
+    const save = async () => {
+      const newVal = input.value.trim();
+      this.textContent = newVal || '—';
+      if (newVal !== current && currentEnquiry) {
+        try {
+          await api('PUT', '/api/admin/enquiries', {
+            enquiryId: currentEnquiry.id,
+            fields: { [field]: newVal }
+          });
+          currentEnquiry[field] = newVal;
+          // Update trip days display if dates changed
+          if ((field === 'startDate' || field === 'endDate') && currentEnquiry.startDate && currentEnquiry.endDate) {
+            const days = Math.ceil((new Date(currentEnquiry.endDate) - new Date(currentEnquiry.startDate)) / 86400000);
+            document.getElementById('pf-tripDays').textContent = days + ' days';
+            currentEnquiry.tripDays = days;
+          }
+          // Update name in header
+          if (field === 'firstName' || field === 'lastName') {
+            document.getElementById('panel-name').textContent = (currentEnquiry.firstName || '') + ' ' + (currentEnquiry.lastName || '');
+          }
+          renderEnquiries();
+          toast('Updated', 'success');
+        } catch (err) {
+          this.textContent = current || '—';
+          toast('Update failed: ' + err.message, 'error');
+        }
       }
-    }
+    };
 
-    // CLOSE DETAIL
-    function closeDetail() {
-      document.getElementById('detail-panel').classList.remove('active');
-    }
+    input.addEventListener('blur', save);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && input.tagName !== 'TEXTAREA') { input.blur(); }
+      if (e.key === 'Escape') { this.textContent = current || '—'; }
+    });
+  });
+});
 
-    // Close detail on backdrop click
-    document.getElementById('detail-panel').addEventListener('click', function(ev) {
-      if (ev.target === this) closeDetail();
+
+/* ═══════════════════════════════════════════════
+   STATUS CHANGE
+   ═══════════════════════════════════════════════ */
+document.getElementById('panel-status').addEventListener('change', async function() {
+  if (!currentEnquiry) return;
+  const newStatus = this.value;
+  try {
+    await api('PUT', '/api/admin/enquiries', {
+      enquiryId: currentEnquiry.id,
+      fields: { status: newStatus }
+    });
+    currentEnquiry.status = newStatus;
+    renderEnquiries();
+    toast('Status updated to ' + newStatus, 'success');
+  } catch (err) {
+    this.value = currentEnquiry.status || 'Enquiry';
+    toast('Failed: ' + err.message, 'error');
+  }
+});
+
+
+/* ═══════════════════════════════════════════════
+   NOTES
+   ═══════════════════════════════════════════════ */
+document.getElementById('save-notes-btn').addEventListener('click', async () => {
+  if (!currentEnquiry) return;
+  const notes = document.getElementById('panel-notes').value;
+  try {
+    await api('PUT', '/api/admin/enquiries', {
+      enquiryId: currentEnquiry.id,
+      fields: { internalNotes: notes }
+    });
+    currentEnquiry.internalNotes = notes;
+    toast('Notes saved', 'success');
+  } catch (err) {
+    toast('Failed: ' + err.message, 'error');
+  }
+});
+
+
+/* ═══════════════════════════════════════════════
+   LINKED YACHTS (in enquiry panel)
+   ═══════════════════════════════════════════════ */
+function renderLinkedYachts() {
+  const container = document.getElementById('panel-yacht-chips');
+  if (!currentEnquiry) { container.innerHTML = ''; return; }
+
+  const linkedIds = (currentEnquiry.linkedYachts || '').split(',').map(s => s.trim()).filter(Boolean);
+  if (linkedIds.length === 0) {
+    container.innerHTML = '<span style="color:var(--gray-400);font-size:12px;">No yachts linked yet</span>';
+    return;
+  }
+
+  container.innerHTML = linkedIds.map(yId => {
+    const yacht = yachts.find(y => y.id === yId);
+    const name = yacht ? yacht.name : yId;
+    const url = yacht && yacht.listingUrl ? yacht.listingUrl : '';
+    return `
+      <div class="yacht-chip">
+        ${url ? `<a href="${esc(url)}" target="_blank">${esc(name)}</a>` : esc(name)}
+        ${yacht && yacht.weeklyRate ? `<span style="color:var(--gray-400);font-size:11px;">$${esc(String(yacht.weeklyRate))}/wk</span>` : ''}
+        <span class="remove" onclick="unlinkYacht('${esc(yId)}')" title="Remove">&times;</span>
+      </div>
+    `;
+  }).join('');
+}
+
+async function unlinkYacht(yachtId) {
+  if (!currentEnquiry) return;
+  try {
+    const data = await api('DELETE', '/api/admin/enquiry-yachts', {
+      enquiryId: currentEnquiry.id,
+      yachtId: yachtId
+    });
+    currentEnquiry.linkedYachts = data.linkedYachts || '';
+    renderLinkedYachts();
+    toast('Yacht unlinked', 'success');
+  } catch (err) {
+    toast('Failed: ' + err.message, 'error');
+  }
+}
+
+
+/* ─── Link yacht form ─── */
+document.getElementById('link-yacht-btn').addEventListener('click', () => {
+  const form = document.getElementById('link-yacht-form');
+  form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  // Populate dropdown with existing yachts
+  const sel = document.getElementById('link-yacht-select');
+  sel.innerHTML = '<option value="">Select existing yacht...</option>' +
+    yachts.map(y => `<option value="${y.id}">${esc(y.name)} — ${esc(y.type || '')} ${y.size ? y.size + 'm' : ''}</option>`).join('');
+});
+
+document.getElementById('ly-cancel').addEventListener('click', () => {
+  document.getElementById('link-yacht-form').style.display = 'none';
+});
+
+// Link existing yacht
+document.getElementById('ly-link-existing').addEventListener('click', async () => {
+  const yachtId = document.getElementById('link-yacht-select').value;
+  if (!yachtId || !currentEnquiry) return toast('Select a yacht first', 'error');
+  try {
+    const data = await api('POST', '/api/admin/enquiry-yachts', {
+      enquiryId: currentEnquiry.id,
+      yachtId: yachtId
+    });
+    currentEnquiry.linkedYachts = data.linkedYachts || '';
+    renderLinkedYachts();
+    document.getElementById('link-yacht-form').style.display = 'none';
+    toast('Yacht linked', 'success');
+  } catch (err) {
+    toast('Failed: ' + err.message, 'error');
+  }
+});
+
+// Add new yacht + link
+document.getElementById('ly-add-new').addEventListener('click', async () => {
+  const name = document.getElementById('ly-name').value.trim();
+  if (!name || !currentEnquiry) return toast('Yacht name required', 'error');
+
+  try {
+    // Add to yacht database
+    const addResult = await api('POST', '/api/admin/yachts', {
+      yacht: {
+        name: name,
+        type: document.getElementById('ly-type').value,
+        size: document.getElementById('ly-size').value,
+        weeklyRate: document.getElementById('ly-rate').value,
+        region: document.getElementById('ly-region').value,
+        builder: document.getElementById('ly-builder').value,
+        listingUrl: document.getElementById('ly-url').value,
+        notes: document.getElementById('ly-notes').value
+      },
+      enquiryId: currentEnquiry.id
     });
 
-    // TOAST
-    function showToast(message, type) {
-      const toast = document.getElementById('toast');
-      const msg = document.getElementById('toast-message');
-      msg.textContent = message;
-      toast.className = 'toast ' + type;
-      toast.style.display = 'block';
-      setTimeout(() => { toast.style.display = 'none'; }, 5000);
+    if (!addResult.yachtId) throw new Error('Failed to create yacht');
+
+    // Link to enquiry
+    const linkResult = await api('POST', '/api/admin/enquiry-yachts', {
+      enquiryId: currentEnquiry.id,
+      yachtId: addResult.yachtId
+    });
+
+    currentEnquiry.linkedYachts = linkResult.linkedYachts || '';
+
+    // Refresh yacht list
+    await loadYachts();
+    renderLinkedYachts();
+
+    // Clear form
+    ['ly-name','ly-size','ly-rate','ly-region','ly-builder','ly-url','ly-notes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('ly-type').selectedIndex = 0;
+    document.getElementById('link-yacht-form').style.display = 'none';
+
+    toast('Yacht added and linked', 'success');
+  } catch (err) {
+    toast('Failed: ' + err.message, 'error');
+  }
+});
+
+
+/* ═══════════════════════════════════════════════
+   YACHT DATABASE TAB
+   ═══════════════════════════════════════════════ */
+async function loadYachts() {
+  try {
+    const data = await api('GET', '/api/admin/yachts');
+    yachts = Array.isArray(data) ? data : (data.yachts || []);
+    renderYachts();
+  } catch (err) {
+    console.error('Failed to load yachts:', err);
+  }
+}
+
+function renderYachts() {
+  const tbody = document.getElementById('yacht-tbody');
+  const countEl = document.getElementById('yacht-count');
+  const searchTerm = (document.getElementById('yacht-search').value || '').toLowerCase();
+
+  let filtered = yachts;
+  if (searchTerm) {
+    filtered = filtered.filter(y => {
+      const haystack = [y.name, y.type, y.builder, y.region, y.amenities, y.id].join(' ').toLowerCase();
+      return haystack.includes(searchTerm);
+    });
+  }
+
+  countEl.textContent = filtered.length + ' yacht' + (filtered.length !== 1 ? 's' : '');
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '';
+    document.getElementById('yacht-empty').style.display = '';
+    return;
+  }
+  document.getElementById('yacht-empty').style.display = 'none';
+
+  tbody.innerHTML = filtered.map(y => `
+    <tr>
+      <td style="color:var(--gray-400);font-size:11px;">${esc(y.id)}</td>
+      <td style="font-weight:600;">${esc(y.name)}</td>
+      <td>${esc(y.type || '—')}</td>
+      <td>${y.size ? esc(String(y.size)) + 'm' : '—'}</td>
+      <td>${y.weeklyRate ? '$' + esc(String(y.weeklyRate)) : '—'}</td>
+      <td>${esc(y.builder || '—')}</td>
+      <td>${y.maxGuests || '—'}</td>
+      <td>${esc(y.region || '—')}</td>
+      <td class="url-cell">${y.listingUrl ? `<a href="${esc(y.listingUrl)}" target="_blank">View</a>` : '—'}</td>
+      <td><button class="delete-btn" onclick="confirmDeleteYacht('${esc(y.id)}','${esc(y.name)}')" title="Delete">&times;</button></td>
+    </tr>
+  `).join('');
+}
+
+document.getElementById('yacht-search').addEventListener('input', renderYachts);
+
+// Add yacht form toggle
+document.getElementById('add-yacht-db-btn').addEventListener('click', () => {
+  const form = document.getElementById('yacht-db-form');
+  form.style.display = form.style.display === 'none' ? '' : 'none';
+});
+document.getElementById('yf-cancel').addEventListener('click', () => {
+  document.getElementById('yacht-db-form').style.display = 'none';
+});
+
+document.getElementById('yf-save').addEventListener('click', async () => {
+  const name = document.getElementById('yf-name').value.trim();
+  if (!name) return toast('Yacht name required', 'error');
+
+  try {
+    await api('POST', '/api/admin/yachts', {
+      yacht: {
+        name: name,
+        type: document.getElementById('yf-type').value,
+        size: document.getElementById('yf-size').value,
+        weeklyRate: document.getElementById('yf-rate').value,
+        builder: document.getElementById('yf-builder').value,
+        yearBuilt: document.getElementById('yf-year').value,
+        maxGuests: document.getElementById('yf-guests').value,
+        cabins: document.getElementById('yf-cabins').value,
+        crew: document.getElementById('yf-crew').value,
+        region: document.getElementById('yf-region').value,
+        listingUrl: document.getElementById('yf-url').value,
+        amenities: document.getElementById('yf-amenities').value,
+        notes: document.getElementById('yf-notes').value
+      }
+    });
+    await loadYachts();
+    // Clear form
+    ['yf-name','yf-size','yf-rate','yf-builder','yf-year','yf-guests','yf-cabins','yf-crew','yf-region','yf-url','yf-amenities','yf-notes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('yf-type').selectedIndex = 0;
+    document.getElementById('yacht-db-form').style.display = 'none';
+    toast('Yacht added to database', 'success');
+  } catch (err) {
+    toast('Failed: ' + err.message, 'error');
+  }
+});
+
+function confirmDeleteYacht(id, name) {
+  document.getElementById('confirm-title').textContent = 'Delete Yacht';
+  document.getElementById('confirm-msg').textContent = `Delete "${name}" from the yacht database? This cannot be undone.`;
+  document.getElementById('confirm-ok').textContent = 'Delete';
+  document.getElementById('confirm-modal').classList.add('active');
+  confirmCallback = async () => {
+    try {
+      await api('DELETE', '/api/admin/yachts', { yachtId: id });
+      yachts = yachts.filter(y => y.id !== id);
+      renderYachts();
+      toast('Yacht deleted', 'success');
+    } catch (err) {
+      toast('Failed: ' + err.message, 'error');
     }
-  </script>
+  };
+}
+
+
+/* ═══════════════════════════════════════════════
+   TOAST
+   ═══════════════════════════════════════════════ */
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast toast-' + (type || 'success');
+  el.style.display = 'block';
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => { el.style.display = 'none'; }, 3500);
+}
+
+
+/* ═══════════════════════════════════════════════
+   UTILS
+   ═══════════════════════════════════════════════ */
+function esc(str) {
+  if (!str) return '';
+  const d = document.createElement('div');
+  d.textContent = String(str);
+  return d.innerHTML;
+}
+</script>
 
 </body>
 </html>
