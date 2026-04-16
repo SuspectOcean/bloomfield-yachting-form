@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bloomfield Yachting â Admin</title>
+  <title>Bloomfield Yachting - Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,7 +24,7 @@
     }
     html, body { font-family: 'Montserrat', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
 
-    /* âââ LOGIN âââ */
+    /* --- LOGIN --- */
     #login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); }
     .login-card { background: var(--white); border-radius: 12px; padding: 48px 40px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
     .login-card h1 { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--navy); letter-spacing: 3px; margin-bottom: 6px; }
@@ -35,7 +35,7 @@
     .login-card button { width: 100%; padding: 14px; margin-top: 20px; background: var(--navy); color: var(--gold); border: none; border-radius: 8px; font-family: inherit; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
     .login-card button:hover { background: var(--navy-light); }
 
-    /* âââ LAYOUT âââ */
+    /* --- LAYOUT --- */
     #app { display: none; min-height: 100vh; }
     #app.active { display: flex; flex-direction: column; }
     .header { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; }
@@ -50,11 +50,11 @@
 
     .main { flex: 1; padding: 32px; overflow-y: auto; }
 
-    /* âââ TABS âââ */
+    /* --- TABS --- */
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* âââ ENQUIRY LIST âââ */
+    /* --- ENQUIRY LIST --- */
     .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
     .list-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 28px; }
     .list-header .count { font-size: 13px; color: var(--gray-400); margin-left: 12px; }
@@ -83,7 +83,7 @@
     .delete-btn { background: none; border: none; color: var(--gray-400); cursor: pointer; font-size: 18px; padding: 4px 8px; border-radius: 4px; transition: all 0.2s; }
     .delete-btn:hover { color: var(--red); background: var(--red-bg); }
 
-    /* âââ DETAIL PANEL (slide-over) âââ */
+    /* --- DETAIL PANEL (slide-over) --- */
     .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; }
     .overlay.active { display: block; }
     .panel { position: fixed; top: 0; right: -620px; width: 600px; max-width: 95vw; height: 100vh; background: var(--white); z-index: 101; transition: right 0.3s ease; overflow-y: auto; box-shadow: -8px 0 30px rgba(0,0,0,0.15); }
@@ -95,7 +95,7 @@
     .panel-close:hover { color: var(--text); }
     .panel-body { padding: 28px; }
 
-    /* âââ EDITABLE FIELDS âââ */
+    /* --- EDITABLE FIELDS --- */
     .section { margin-bottom: 28px; }
     .section-title { font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-100); }
     .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -126,7 +126,7 @@
     .yacht-chip .remove { cursor: pointer; color: var(--gray-400); font-size: 14px; }
     .yacht-chip .remove:hover { color: var(--red); }
 
-    /* âââ YACHT DATABASE TAB âââ */
+    /* --- YACHT DATABASE TAB --- */
     .yacht-table-wrap { overflow-x: auto; }
     .yacht-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .yacht-table th { padding: 10px 14px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-500); border-bottom: 2px solid var(--gray-200); font-weight: 600; white-space: nowrap; }
@@ -136,7 +136,7 @@
     .yacht-table .url-cell a { color: var(--gold); text-decoration: none; }
     .yacht-table .url-cell a:hover { text-decoration: underline; }
 
-    /* âââ BUTTONS âââ */
+    /* --- BUTTONS --- */
     .btn { padding: 8px 18px; border-radius: 6px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; }
     .btn-primary { background: var(--gold); color: var(--white); }
     .btn-primary:hover { background: var(--gold-light); }
@@ -146,7 +146,7 @@
     .btn-danger:hover { background: var(--red); color: var(--white); }
     .btn-sm { padding: 5px 12px; font-size: 11px; }
 
-    /* âââ CONFIRM MODAL âââ */
+    /* --- CONFIRM MODAL --- */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
     .modal-overlay.active { display: flex; }
     .modal { background: var(--white); border-radius: 12px; padding: 32px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
@@ -155,13 +155,13 @@
     .modal .modal-btns { display: flex; gap: 12px; justify-content: center; }
     .modal .modal-btns .btn { min-width: 100px; padding: 10px 24px; }
 
-    /* âââ TOAST âââ */
+    /* --- TOAST --- */
     .toast { position: fixed; bottom: 24px; right: 24px; padding: 14px 22px; border-radius: 8px; font-size: 13px; font-weight: 500; z-index: 300; animation: slideIn 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
     .toast-success { background: var(--green-bg); color: var(--green-text); border: 1px solid var(--green); }
     .toast-error { background: var(--red-bg); color: var(--red-text); border: 1px solid var(--red); }
     @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-    /* âââ LOADING âââ */
+    /* --- LOADING --- */
     .loading { text-align: center; padding: 60px; color: var(--gray-400); }
     .spinner { width: 28px; height: 28px; border: 3px solid var(--gray-200); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -202,7 +202,7 @@
     .yacht-db-form input:focus, .yacht-db-form select:focus { border-color: var(--gold); }
     @media (max-width: 768px) { .yacht-db-form .form-grid { grid-template-columns: 1fr 1fr; } }
 
-    /* âââ CALENDAR âââ */
+    /* --- CALENDAR --- */
     .cal-nav { display: flex; align-items: center; gap: 12px; }
     .cal-month-label { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; min-width: 180px; text-align: center; }
     .cal-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
@@ -234,7 +234,7 @@
 </head>
 <body>
 
-<!-- âââââââââââ LOGIN âââââââââââ -->
+<!-- =========== LOGIN =========== -->
 <div id="login-screen">
   <div class="login-card">
     <h1>BLOOMFIELD YACHTING</h1>
@@ -245,7 +245,7 @@
   </div>
 </div>
 
-<!-- âââââââââââ APP âââââââââââ -->
+<!-- =========== APP =========== -->
 <div id="app">
   <div class="header">
     <div>
@@ -261,7 +261,7 @@
   </div>
 
   <div class="main">
-    <!-- âââ ENQUIRIES TAB âââ -->
+    <!-- --- ENQUIRIES TAB --- -->
     <div class="tab-content active" id="tab-enquiries">
       <div class="list-header">
         <div style="display:flex;align-items:baseline;">
@@ -284,7 +284,7 @@
       </div>
     </div>
 
-    <!-- âââ CALENDAR TAB âââ -->
+    <!-- --- CALENDAR TAB --- -->
     <div class="tab-content" id="tab-calendar">
       <div class="list-header">
         <div style="display:flex;align-items:baseline;">
@@ -311,7 +311,7 @@
       </div>
     </div>
 
-    <!-- âââ YACHT DATABASE TAB âââ -->
+    <!-- --- YACHT DATABASE TAB --- -->
     <div class="tab-content" id="tab-yachts">
       <div class="list-header">
         <div style="display:flex;align-items:baseline;">
@@ -366,7 +366,7 @@
   </div>
 </div>
 
-<!-- âââââââââââ DETAIL PANEL (slide-over) âââââââââââ -->
+<!-- =========== DETAIL PANEL (slide-over) =========== -->
 <div class="overlay" id="overlay"></div>
 <div class="panel" id="panel">
   <div class="panel-header">
@@ -389,6 +389,11 @@
     </div>
   </div>
   <div class="panel-body">
+
+    <!-- Submitted timestamp -->
+    <div id="panel-submitted-row" style="padding:0 24px 12px;font-size:12px;color:var(--gray-400);display:none;">
+      Submitted: <span id="pf-submittedAt"></span>
+    </div>
 
     <!-- Client Details -->
     <div class="section">
@@ -471,7 +476,7 @@
             <option value="">Select existing yacht...</option>
           </select>
         </div>
-        <div style="text-align:center;color:var(--gray-400);font-size:11px;margin-bottom:10px;">â or add new â</div>
+        <div style="text-align:center;color:var(--gray-400);font-size:11px;margin-bottom:10px;">- or add new -</div>
         <div class="form-row">
           <div><label>Yacht Name *</label><input type="text" id="ly-name" /></div>
           <div><label>Type</label><select id="ly-type"><option value="">Select...</option><option>Motor Yacht</option><option>Sailing Yacht</option><option>Catamaran</option><option>Gulet</option></select></div>
@@ -501,7 +506,7 @@
   </div>
 </div>
 
-<!-- âââââââââââ CONFIRM MODAL âââââââââââ -->
+<!-- =========== CONFIRM MODAL =========== -->
 <div class="modal-overlay" id="confirm-modal">
   <div class="modal">
     <h3 id="confirm-title">Are you sure?</h3>
@@ -513,13 +518,13 @@
   </div>
 </div>
 
-<!-- âââââââââââ TOAST âââââââââââ -->
+<!-- =========== TOAST =========== -->
 <div id="toast" style="display:none;"></div>
 
 <script>
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    STATE
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 let authToken = null;
 let enquiries = [];
 let yachts = [];
@@ -535,9 +540,9 @@ const STATUS_CLASS = {
 };
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    API HELPERS
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 async function api(method, path, body) {
   const opts = {
     method,
@@ -561,9 +566,9 @@ async function api(method, path, body) {
 }
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    AUTH
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 document.getElementById('login-btn').addEventListener('click', doLogin);
 document.getElementById('logout-btn').addEventListener('click', logout);
@@ -601,9 +606,9 @@ function logout() {
 }
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    TABS
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 document.querySelectorAll('.nav-btn[data-tab]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.classList.remove('active'));
@@ -614,9 +619,9 @@ document.querySelectorAll('.nav-btn[data-tab]').forEach(btn => {
 });
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    ENQUIRY LIST
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 async function loadEnquiries() {
   try {
     const data = await api('GET', '/api/admin/enquiries');
@@ -656,9 +661,10 @@ function renderEnquiries() {
       <div onclick="openEnquiry('${e.id}')" style="flex:1;cursor:pointer;">
         <div class="name">${esc(e.firstName)} ${esc(e.lastName)}</div>
         <div class="meta">
-          <span>${esc(e.pickUp || e.destination || 'â')}</span>
-          <span>${esc(e.startDate || 'â')} â ${esc(e.endDate || 'â')}</span>
-          <span>${esc(e.budget || 'â')}</span>
+          <span>${esc(e.pickUp || e.destination || '-')}</span>
+          <span>${esc(e.startDate || '-')} &rarr; ${esc(e.endDate || '-')}</span>
+          <span>${esc(e.budget || '-')}</span>
+          ${e.submittedAt ? `<span style="color:var(--gray-400);font-size:11px;">Submitted ${new Date(e.submittedAt).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'})}</span>` : ''}
         </div>
       </div>
       <div class="actions">
@@ -683,9 +689,9 @@ document.getElementById('filter-bar').addEventListener('click', e => {
 });
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    DELETE WITH CONFIRMATION
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 function confirmDelete(id, name) {
   document.getElementById('confirm-title').textContent = 'Delete Enquiry';
   document.getElementById('confirm-msg').textContent = `Are you sure you want to permanently delete the enquiry for ${name}? This cannot be undone.`;
@@ -715,9 +721,9 @@ document.getElementById('confirm-cancel').addEventListener('click', () => {
 });
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    DETAIL PANEL
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 function openEnquiry(id) {
   const e = enquiries.find(en => en.id === id);
   if (!e) return;
@@ -737,13 +743,26 @@ function openEnquiry(id) {
   };
   for (const [key, val] of Object.entries(fields)) {
     const el = document.getElementById('pf-' + key);
-    if (el) el.textContent = val || 'â';
+    if (el) el.textContent = val || '-';
   }
 
   // Non-editable
-  document.getElementById('pf-tripDays').textContent = e.tripDays ? e.tripDays + ' days' : 'â';
-  document.getElementById('pf-datesFlexible').textContent = e.datesFlexible || 'â';
-  document.getElementById('pf-destFlexible').textContent = e.destinationFlexible || 'â';
+  document.getElementById('pf-tripDays').textContent = e.tripDays ? e.tripDays + ' days' : '-';
+  document.getElementById('pf-datesFlexible').textContent = e.datesFlexible || '-';
+  document.getElementById('pf-destFlexible').textContent = e.destinationFlexible || '-';
+
+  // Submitted timestamp
+  if (e.submittedAt) {
+    try {
+      var d = new Date(e.submittedAt);
+      document.getElementById('pf-submittedAt').textContent = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + ' at ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('panel-submitted-row').style.display = '';
+    } catch(err) {
+      document.getElementById('panel-submitted-row').style.display = 'none';
+    }
+  } else {
+    document.getElementById('panel-submitted-row').style.display = 'none';
+  }
 
   // PDF
   if (e.pdfUrl) {
@@ -781,9 +800,9 @@ document.getElementById('panel-delete').addEventListener('click', () => {
 });
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    INLINE EDITING (click to edit)
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 document.querySelectorAll('.editable').forEach(el => {
   el.addEventListener('click', function() {
     if (this.querySelector('input, textarea')) return; // already editing
@@ -805,14 +824,14 @@ document.querySelectorAll('.editable').forEach(el => {
       input.className = 'edit-input';
     }
 
-    input.value = current === 'â' ? '' : current;
+    input.value = current === '-' ? '' : current;
     this.textContent = '';
     this.appendChild(input);
     input.focus();
 
     const save = async () => {
       const newVal = input.value.trim();
-      this.textContent = newVal || 'â';
+      this.textContent = newVal || '-';
       if (newVal !== current && currentEnquiry) {
         try {
           await api('PUT', '/api/admin/enquiries', {
@@ -833,7 +852,7 @@ document.querySelectorAll('.editable').forEach(el => {
           renderEnquiries();
           toast('Updated', 'success');
         } catch (err) {
-          this.textContent = current || 'â';
+          this.textContent = current || '-';
           toast('Update failed: ' + err.message, 'error');
         }
       }
@@ -842,15 +861,15 @@ document.querySelectorAll('.editable').forEach(el => {
     input.addEventListener('blur', save);
     input.addEventListener('keydown', e => {
       if (e.key === 'Enter' && input.tagName !== 'TEXTAREA') { input.blur(); }
-      if (e.key === 'Escape') { this.textContent = current || 'â'; }
+      if (e.key === 'Escape') { this.textContent = current || '-'; }
     });
   });
 });
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    STATUS CHANGE
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 document.getElementById('panel-status').addEventListener('change', async function() {
   if (!currentEnquiry) return;
   const newStatus = this.value;
@@ -869,9 +888,9 @@ document.getElementById('panel-status').addEventListener('change', async functio
 });
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    NOTES
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 document.getElementById('save-notes-btn').addEventListener('click', async () => {
   if (!currentEnquiry) return;
   const notes = document.getElementById('panel-notes').value;
@@ -888,9 +907,9 @@ document.getElementById('save-notes-btn').addEventListener('click', async () => 
 });
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    LINKED YACHTS (in enquiry panel)
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 function renderLinkedYachts() {
   const container = document.getElementById('panel-yacht-chips');
   if (!currentEnquiry) { container.innerHTML = ''; return; }
@@ -931,14 +950,14 @@ async function unlinkYacht(yachtId) {
 }
 
 
-/* âââ Link yacht form âââ */
+/* --- Link yacht form --- */
 document.getElementById('link-yacht-btn').addEventListener('click', () => {
   const form = document.getElementById('link-yacht-form');
   form.style.display = form.style.display === 'none' ? 'block' : 'none';
   // Populate dropdown with existing yachts
   const sel = document.getElementById('link-yacht-select');
   sel.innerHTML = '<option value="">Select existing yacht...</option>' +
-    yachts.map(y => `<option value="${y.id}">${esc(y.name)} â ${esc(y.type || '')} ${y.size ? y.size + 'm' : ''}</option>`).join('');
+    yachts.map(y => `<option value="${y.id}">${esc(y.name)} - ${esc(y.type || '')} ${y.size ? y.size + 'm' : ''}</option>`).join('');
 });
 
 document.getElementById('ly-cancel').addEventListener('click', () => {
@@ -1010,9 +1029,9 @@ document.getElementById('ly-add-new').addEventListener('click', async () => {
 });
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    YACHT DATABASE TAB
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 async function loadYachts() {
   try {
     const data = await api('GET', '/api/admin/yachts');
@@ -1049,13 +1068,13 @@ function renderYachts() {
     <tr>
       <td style="color:var(--gray-400);font-size:11px;">${esc(y.id)}</td>
       <td style="font-weight:600;">${esc(y.name)}</td>
-      <td>${esc(y.type || 'â')}</td>
-      <td>${y.size ? esc(String(y.size)) + 'm' : 'â'}</td>
-      <td>${y.weeklyRate ? '$' + esc(String(y.weeklyRate)) : 'â'}</td>
-      <td>${esc(y.builder || 'â')}</td>
-      <td>${y.maxGuests || 'â'}</td>
-      <td>${esc(y.region || 'â')}</td>
-      <td class="url-cell">${y.listingUrl ? `<a href="${esc(y.listingUrl)}" target="_blank">View</a>` : 'â'}</td>
+      <td>${esc(y.type || '-')}</td>
+      <td>${y.size ? esc(String(y.size)) + 'm' : '-'}</td>
+      <td>${y.weeklyRate ? '$' + esc(String(y.weeklyRate)) : '-'}</td>
+      <td>${esc(y.builder || '-')}</td>
+      <td>${y.maxGuests || '-'}</td>
+      <td>${esc(y.region || '-')}</td>
+      <td class="url-cell">${y.listingUrl ? `<a href="${esc(y.listingUrl)}" target="_blank">View</a>` : '-'}</td>
       <td><button class="delete-btn" onclick="confirmDeleteYacht('${esc(y.id)}','${esc(y.name)}')" title="Delete">&times;</button></td>
     </tr>
   `).join('');
@@ -1108,7 +1127,7 @@ document.getElementById('yf-save').addEventListener('click', async () => {
 function confirmDeleteYacht(id, name) {
   document.getElementById('confirm-title').textContent = 'Delete Yacht';
   document.getElementById('confirm-msg').textContent = `Delete "${name}" from the yacht database? This cannot be undone.`;
-  document.getElentById('confirm-ok').textContent = 'Delete';
+  document.getElementById('confirm-ok').textContent = 'Delete';
   document.getElementById('confirm-modal').classList.add('active');
   confirmCallback = async () => {
     try {
@@ -1123,9 +1142,9 @@ function confirmDeleteYacht(id, name) {
 }
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    TOAST
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 function toast(msg, type) {
   const el = document.getElementById('toast');
   el.textContent = msg;
@@ -1136,9 +1155,9 @@ function toast(msg, type) {
 }
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    UTILS
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 function esc(str) {
   if (!str) return '';
   const d = document.createElement('div');
@@ -1147,9 +1166,9 @@ function esc(str) {
 }
 
 
-/* âââââââââââââââââââââââââââââââââââââââââââââââ
+/* ===============================================
    CALENDAR VIEW
-   âââââââââââââââââââââââââââââââââââââââââââââââ */
+   =============================================== */
 let calYear, calMonth; // 0-indexed month
 (function initCalendar() {
   const now = new Date();
@@ -1255,7 +1274,7 @@ function renderCalendar() {
       const showLabel = isStart || dow === 0;
       const statusCls = CAL_STATUS_CLASS[e.status] || 'status-enquiry';
 
-      eventsHtml += `<div class="cal-event ${statusCls} ${shape}" onclick="openEnquiry('${e.id}')" title="${esc(e.firstName)} ${esc(e.lastName)} â ${esc(e.status)}${e.pickUp ? ' â ' + esc(e.pickUp) : ''}">${showLabel ? esc(e.firstName) + ' ' + esc((e.lastName||'').charAt(0)) + '.' : '&nbsp;'}</div>`;
+      eventsHtml += `<div class="cal-event ${statusCls} ${shape}" onclick="openEnquiry('${e.id}')" title="${esc(e.firstName)} ${esc(e.lastName)} - ${esc(e.status)}${e.pickUp ? ' - ' + esc(e.pickUp) : ''}">${showLabel ? esc(e.firstName) + ' ' + esc((e.lastName||'').charAt(0)) + '.' : '&nbsp;'}</div>`;
     });
 
     html += `<div class="${cls}"><div class="day-num">${cell.day}</div>${eventsHtml}</div>`;
