@@ -28,7 +28,7 @@
   --gray-400: #94a3b8;
   --gray-600: #64748b;
   --text: #0f172a;
-  --green: #004225;
+  --green: #303B1B;
 }
 body { font-family: 'Montserrat', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
 
@@ -259,51 +259,47 @@ option { font-weight: 400; color: var(--text); padding: 4px 0; }
         <select id="destination" name="destination" required>
           <option value="">Select a destination...</option>
           <optgroup label="Mediterranean (May - October)">
-            <option value="Any, Mediterranean">Any, Mediterranean</option>
-            <option value="Croatia">Croatia</option>
-            <option value="France">France</option>
             <option value="Greece">Greece</option>
+            <option value="Croatia">Croatia</option>
             <option value="Italy">Italy</option>
-            <option value="Montenegro">Montenegro</option>
+            <option value="France">France</option>
             <option value="Spain">Spain</option>
             <option value="Turkey">Turkey</option>
+            <option value="Montenegro">Montenegro</option>
             <option value="Other, Mediterranean">Other, Mediterranean</option>
           </optgroup>
           <optgroup label="Caribbean (December - April)">
-            <option value="Any, Caribbean">Any, Caribbean</option>
-            <option value="Antigua">Antigua</option>
-            <option value="Bahamas">Bahamas</option>
             <option value="British Virgin Islands">British Virgin Islands</option>
-            <option value="St. Lucia &amp; Martinique">St. Lucia &amp; Martinique</option>
-            <option value="St. Martin &amp; St. Barts">St. Martin &amp; St. Barts</option>
+            <option value="Bahamas">Bahamas</option>
             <option value="St. Vincent &amp; The Grenadines">St. Vincent &amp; The Grenadines</option>
+            <option value="St. Martin &amp; St. Barts">St. Martin &amp; St. Barts</option>
+            <option value="Antigua">Antigua</option>
+            <option value="St. Lucia &amp; Martinique">St. Lucia &amp; Martinique</option>
             <option value="US Virgin Islands">US Virgin Islands</option>
-            <option value="Other, Caribbean">Other, Caribbean</option>
+             <option value="Other, Caribbean">Other, Caribbean</option>
           </optgroup>
           <optgroup label="South East Asia &amp; Pacific">
-            <option value="Any, South East Asia &amp; Pacific">Any, South East Asia &amp; Pacific</option>
-            <option value="Australia">Australia</option>
+            <option value="Seychelles">Seychelles</option>
+            <option value="Maldives">Maldives</option>
+            <option value="Thailand">Thailand</option>
+            <option value="Indonesia">Indonesia</option>
+            <option value="Tahiti &amp; Bora Bora">Tahiti &amp; Bora Bora</option>
             <option value="Fiji">Fiji</option>
             <option value="French Polynesia">French Polynesia</option>
-            <option value="Indonesia">Indonesia</option>
-            <option value="Maldives">Maldives</option>
-            <option value="Seychelles">Seychelles</option>
-            <option value="Tahiti &amp; Bora Bora">Tahiti &amp; Bora Bora</option>
-            <option value="Thailand">Thailand</option>
-            <option value="Other, South East Asia">Other, South East Asia</option>
+            <option value="Australia">Australia</option>
+             <option value="Other, South East Asia">Other, South East Asia</option>
           </optgroup>
           <optgroup label="Americas">
-            <option value="Any, Americas">Any, Americas</option>
+            <option value="Florida, USA">Florida, USA</option>
+            <option value="Georgia To Delaware, USA">Georgia To Delaware, USA</option>
+            <option value="California, USA">California, USA</option>
+            <option value="Pacific North West, USA">Pacific North West, USA</option>
+            <option value="Northern East Coast, USA">Northern East Coast, USA</option>
             <option value="Alaska, USA">Alaska, USA</option>
             <option value="Baja, Mexico">Baja, Mexico</option>
-            <option value="California, USA">California, USA</option>
-            <option value="Central America, East">Central America, East</option>
             <option value="Central America, West">Central America, West</option>
-            <option value="Florida, USA">Florida, USA</option>
+            <option value="Central America, East">Central America, East</option>
             <option value="Galapagos Islands, Ecuador">Galapagos Islands, Ecuador</option>
-            <option value="Georgia To Delaware, USA">Georgia To Delaware, USA</option>
-            <option value="Northern East Coast, USA">Northern East Coast, USA</option>
-            <option value="Pacific North West, USA">Pacific North West, USA</option>
             <option value="Other, Americas">Other, Americas</option>
             <option value="Other, Write in Box Below">Other, Write in Box Below</option>
           </optgroup>
@@ -469,7 +465,7 @@ async function submitForm(e) {
   checkboxes.forEach(name => { data[name] = form.querySelector('[name="'+name+'"]')?.checked || false; });
 
   try {
-    const res = await fetch('/api/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    const res = await fetch('https://bloomfield-yachting-form.vercel.app/api/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
     if (res.ok) {
         gtag('event', 'charter_enquiry_submitted', { event_category: 'form', event_label: data.destination || 'unknown' });
       document.getElementById('success-overlay').classList.add('visible');
