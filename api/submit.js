@@ -29,76 +29,76 @@ export default async function handler(req, res) {
 
     const row = (label, value) => (!value || value === '-') ? '' :
       `<tr>
-        <td style="padding:9px 24px 9px 0;color:#64748b;font-size:13px;width:40%;vertical-align:top">${label}</td>
-        <td style="padding:9px 0;color:#0f172a;font-size:13px;font-weight:500">${value}</td>
-      </tr>`;
+        <td style="padding:8px 24px 8px 0;color:#6b7280;font-size:13px;width:38%;vertical-align:top;font-family:Arial,sans-serif">${label}</td>
+        <td style="padding:8px 0;color:#111827;font-size:13px;font-weight:600;font-family:Arial,sans-serif">${value}</td>
+      </tr>
+      <tr><td colspan="2" style="padding:0"><div style="height:1px;background:#f3f4f6"></div></td></tr>`;
 
     const section = (title) =>
-      `<tr><td colspan="2" style="padding:24px 0 6px 0">
-        <p style="margin:0;font-size:10px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:#FF6321">${title}</p>
-        <div style="height:1px;background:#f1f5f9;margin-top:6px"></div>
+      `<tr><td colspan="2" style="padding:20px 0 4px 0">
+        <p style="margin:0;font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#F97316;font-family:Arial,sans-serif">${title}</p>
        </td></tr>`;
 
     const htmlBody = `<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>New Charter Enquiry</title></head>
-<body style="margin:0;padding:0;background:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f9fafb;font-family:Arial,Helvetica,sans-serif">
 
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;padding:40px 20px">
+<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#f9fafb" style="padding:32px 16px">
 <tr><td align="center">
-<table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:580px">
 
-  <!-- Top bar -->
-  <tr><td style="background:#0a0f1e;padding:0;border-radius:12px 12px 0 0;overflow:hidden">
+  <!-- Header -->
+  <tr><td bgcolor="#111827" style="padding:24px 32px;border-radius:8px 8px 0 0">
     <table width="100%" cellpadding="0" cellspacing="0">
       <tr>
-        <td style="padding:24px 32px">
-          <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#FF6321">Bloomfield Yachting</p>
-          <p style="margin:4px 0 0;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4)">Charter Enquiry</p>
+        <td>
+          <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#F97316;font-family:Arial,sans-serif">Bloomfield Yachting</p>
+          <p style="margin:3px 0 0;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#6b7280;font-family:Arial,sans-serif">Charter Enquiry</p>
         </td>
-        <td style="padding:24px 32px;text-align:right">
-          <p style="margin:0;font-size:11px;color:rgba(255,255,255,0.3)">${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+        <td align="right">
+          <p style="margin:0;font-size:11px;color:#4b5563;font-family:Arial,sans-serif">${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
         </td>
       </tr>
     </table>
   </td></tr>
 
-  <!-- Orange highlight bar -->
-  <tr><td style="background:#FF6321;padding:14px 32px">
-    <p style="margin:0;font-size:14px;color:#fff;font-weight:600">
-      New enquiry from <strong>${data.fullName || 'Unknown'}</strong>${data.destination ? ' &mdash; ' + data.destination : ''}
-    </p>
-  </td></tr>
+  <!-- Orange border accent line -->
+  <tr><td height="3" bgcolor="#F97316" style="font-size:0;line-height:0">&nbsp;</td></tr>
 
-  <!-- White content card -->
-  <tr><td style="background:#ffffff;padding:32px;border-radius:0 0 12px 12px;border:1px solid #e2e8f0;border-top:none">
+  <!-- White content -->
+  <tr><td bgcolor="#ffffff" style="padding:32px;border-radius:0 0 8px 8px;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb">
+
+    <!-- Enquiry summary -->
+    <p style="margin:0 0 24px;font-size:15px;color:#111827;font-weight:700;font-family:Arial,sans-serif">
+      New enquiry from ${data.fullName || 'Unknown'}${data.destination ? ' &mdash; ' + data.destination : ''}
+    </p>
 
     <table width="100%" cellpadding="0" cellspacing="0">
 
       ${section('Client Details')}
-      ${row('Full Name',    data.fullName)}
-      ${row('Email',        data.email ? `<a href="mailto:${data.email}" style="color:#FF6321;text-decoration:none">${data.email}</a>` : null)}
-      ${row('Phone',        data.phone)}
-      ${row('Nationality',  data.nationality)}
-      ${row('Member ID',    data.memberId)}
-      ${row('Referred By',  data.referredBy)}
+      ${row('Full Name',   data.fullName)}
+      ${row('Email',       data.email ? `<a href="mailto:${data.email}" style="color:#F97316;text-decoration:none">${data.email}</a>` : null)}
+      ${row('Phone',       data.phone)}
+      ${row('Nationality', data.nationality)}
+      ${row('Member ID',   data.memberId)}
+      ${row('Referred By', data.referredBy)}
 
       ${section('Charter Preferences')}
-      ${row('Start Date',           data.startDate)}
-      ${row('End Date',             data.endDate)}
-      ${row('Dates Flexible',       data.datesFlexible)}
-      ${row('Destination',          data.destination)}
-      ${row('Dest. Flexible',       data.destinationFlexible)}
-      ${row('Adults',               data.adults)}
-      ${row('Children',             data.children)}
-      ${row('Weekly Budget',        data.budget)}
+      ${row('Start Date',        data.startDate)}
+      ${row('End Date',          data.endDate)}
+      ${row('Dates Flexible',    data.datesFlexible)}
+      ${row('Destination',       data.destination)}
+      ${row('Dest. Flexible',    data.destinationFlexible)}
+      ${row('Adults',            data.adults)}
+      ${row('Children',          data.children)}
+      ${row('Weekly Budget',     data.budget)}
 
       ${section('Yacht Preferences')}
-      ${row('Yacht Type',    data.yachtType)}
-      ${row('Size',          data.yachtSize)}
-      ${row('Style',         data.yachtStyle)}
-      ${row('Amenities',     amenities.length ? amenities.join(', ') : null)}
+      ${row('Yacht Type', data.yachtType)}
+      ${row('Size',       data.yachtSize)}
+      ${row('Style',      data.yachtStyle)}
+      ${row('Amenities',  amenities.length ? amenities.join(', ') : null)}
 
       ${section('Occasion & Requirements')}
       ${row('Occasion',             data.occasion)}
@@ -108,11 +108,11 @@ export default async function handler(req, res) {
 
     <!-- Reply button -->
     ${data.email ? `
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:28px">
-      <tr><td style="padding-top:24px;border-top:1px solid #f1f5f9">
+    <table cellpadding="0" cellspacing="0" style="margin-top:28px">
+      <tr><td bgcolor="#111827" style="border-radius:6px;padding:12px 24px">
         <a href="mailto:${data.email}?subject=Re: Your Bloomfield Yachting Charter Enquiry"
-           style="display:inline-block;background:#FF6321;color:#ffffff;padding:12px 28px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:0.02em">
-          Reply to ${data.fullName || 'Enquirer'} &rarr;
+           style="color:#F97316;font-size:13px;font-weight:700;text-decoration:none;font-family:Arial,sans-serif;letter-spacing:0.05em">
+          REPLY TO ${(data.fullName || 'ENQUIRER').toUpperCase()} &rarr;
         </a>
       </td></tr>
     </table>` : ''}
@@ -121,9 +121,9 @@ export default async function handler(req, res) {
 
   <!-- Footer -->
   <tr><td style="padding:20px 0;text-align:center">
-    <p style="margin:0;font-size:11px;color:#94a3b8">
+    <p style="margin:0;font-size:11px;color:#9ca3af;font-family:Arial,sans-serif">
       Bloomfield Yachting &middot; Antigua &amp; Barbuda &middot;
-      <a href="mailto:enquiries@bloomfield-yachting.com" style="color:#FF6321;text-decoration:none">enquiries@bloomfield-yachting.com</a>
+      <a href="mailto:enquiries@bloomfield-yachting.com" style="color:#9ca3af">enquiries@bloomfield-yachting.com</a>
     </p>
   </td></tr>
 
@@ -168,7 +168,7 @@ export default async function handler(req, res) {
       );
     }
 
-    const results  = await Promise.all(promises);
+    const results   = await Promise.all(promises);
     const resendRes = results[0];
 
     if (!resendRes.ok) {
