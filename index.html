@@ -114,16 +114,16 @@ input[type="date"] { cursor: pointer; }
 }
 .day-charter-check input { accent-color: var(--gold); }
 
-.amenities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 4px; }
-.amenities-grid label {
+.amenities-grid, .occasion-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 4px; }
+.amenities-grid label, .occasion-grid label {
   display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 400;
   text-transform: none; letter-spacing: 0; color: var(--text); cursor: pointer;
   padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: 6px;
   transition: all 0.2s; background: var(--white);
 }
-.amenities-grid label:hover { border-color: var(--gold); }
-.amenities-grid label:has(input:checked) { border-color: var(--gold); background: rgba(249,115,22,0.08); }
-.amenities-grid input { accent-color: var(--gold); }
+.amenities-grid label:hover, .occasion-grid label:hover { border-color: var(--gold); }
+.amenities-grid label:has(input:checked), .occasion-grid label:has(input:checked) { border-color: var(--gold); background: rgba(249,115,22,0.08); }
+.amenities-grid input, .occasion-grid input { accent-color: var(--gold); }
 
 .submit-wrap { margin-top: 40px; text-align: center; }
 .btn-submit {
@@ -350,7 +350,7 @@ option { font-weight: 400; color: var(--text); padding: 4px 0; }
 
     <h2 class="section-title">Occasion &amp; Special Requirements</h2>
 
-    <div class="field"><label>Occasion</label><div class="radio-group"><label><input type="radio" name="occasion" value="Holiday" /><span>Holiday</span></label><label><input type="radio" name="occasion" value="Anniversary" /><span>Anniversary</span></label><label><input type="radio" name="occasion" value="Birthday" /><span>Birthday</span></label><label><input type="radio" name="occasion" value="Corporate" /><span>Corporate</span></label><label><input type="radio" name="occasion" value="Honeymoon" /><span>Honeymoon</span></label><label><input type="radio" name="occasion" value="Other" /><span>Other</span></label></div></div>
+    <div class="field"><label>Occasion</label><div class="occasion-grid"><label><input type="radio" name="occasion" value="Holiday" /><span>Holiday</span></label><label><input type="radio" name="occasion" value="Anniversary" /><span>Anniversary</span></label><label><input type="radio" name="occasion" value="Birthday" /><span>Birthday</span></label><label><input type="radio" name="occasion" value="Corporate" /><span>Corporate</span></label><label><input type="radio" name="occasion" value="Honeymoon" /><span>Honeymoon</span></label><label><input type="radio" name="occasion" value="Other" /><span>Other</span></label></div></div>
 
     <div class="field" style="margin-top:20px"><label for="specialRequirements">Special Requirements, Dietary Needs, or Additional Notes</label><textarea id="specialRequirements" name="specialRequirements" placeholder="Please share any special requests, dietary requirements, or additional information..."></textarea></div>
 
@@ -475,11 +475,4 @@ async function submitForm(e) {
       btn.innerHTML = 'Submit Enquiry';
     }
   } catch (err) {
-    alert('There was a problem submitting your enquiry. Please check your connection and try again.');
-    btn.disabled = false;
-    btn.innerHTML = 'Submit Enquiry';
-  }
-}
-</script>
-</body>
-</html>
+    alert('There was a problem submitting your enquiry. Please check
