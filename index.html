@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -469,7 +469,7 @@ async function submitForm(e) {
   checkboxes.forEach(name => { data[name] = form.querySelector('[name="'+name+'"]')?.checked || false; });
 
   try {
-    const res = await fetch('/api/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    const res = await fetch('/enquiries/api/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
     if (res.ok) {
         gtag('event', 'charter_enquiry_submitted', { event_category: 'form', event_label: data.destination || 'unknown' });
       document.getElementById('success-overlay').classList.add('visible');
