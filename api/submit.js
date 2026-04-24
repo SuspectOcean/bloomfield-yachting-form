@@ -1,11 +1,11 @@
-export default async function handler(req, res) {
+﻿export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
   const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL;
-  const TO_EMAIL = 'roscoebloomfield89@gmail.com';
+  const TO_EMAIL = 'enquiries@bloomfield-yachting.com';
 
   if (!RESEND_API_KEY) {
     return res.status(500).json({ error: 'Email service not configured' });
